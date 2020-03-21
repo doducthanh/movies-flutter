@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "642574638063",
+    "firebase_url": "https://movieapp-e455b.firebaseio.com",
+    "project_id": "movieapp-e455b",
+    "storage_bucket": "movieapp-e455b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:642574638063:android:be9f7e9372ec8537b1741a",
+        "android_client_info": {
+          "package_name": "ddthanh.com.vn.movieappbloc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "642574638063-8sdo6112pshgd4jbajcau2ksdq9m0u8d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3EdAMeQtevudS_qwg92mgSelMeJS4NVo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "642574638063-8sdo6112pshgd4jbajcau2ksdq9m0u8d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "642574638063-p6v9vcd4msvbjjcuqqa9es812k0ac4ip.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ddthanh.com.vn.movieappbloc"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
