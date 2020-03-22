@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>104929172429-qs6ffslaoh37p11uuk3j7tgg4r2ge63d.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.104929172429-qs6ffslaoh37p11uuk3j7tgg4r2ge63d</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBnTg7CRayvEMFLidDAx2u9YT81HMC0dkQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>104929172429</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>ddthanh.com.vn.movieflutterfirestore</string>
+	<key>PROJECT_ID</key>
+	<string>flutter-movie-357b1</string>
+	<key>STORAGE_BUCKET</key>
+	<string>flutter-movie-357b1.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:104929172429:ios:e3196ab9c12bea25a10284</string>
+	<key>DATABASE_URL</key>
+	<string>https://flutter-movie-357b1.firebaseio.com</string>
+</dict>
+</plist>

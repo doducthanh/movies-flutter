@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "104929172429",
+    "firebase_url": "https://flutter-movie-357b1.firebaseio.com",
+    "project_id": "flutter-movie-357b1",
+    "storage_bucket": "flutter-movie-357b1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:104929172429:android:d22861a742ff2e48a10284",
+        "android_client_info": {
+          "package_name": "ddthanh.com.vn.movieflutterfirestore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "104929172429-66nrjkklsogncc5ltvfho8lphviqqis2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDu2KM30ZhOal-2XMcZkFDI7N5iMYDqmFA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "104929172429-66nrjkklsogncc5ltvfho8lphviqqis2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
