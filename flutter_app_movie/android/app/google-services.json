@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "104929172429",
-    "firebase_url": "https://flutter-movie-357b1.firebaseio.com",
-    "project_id": "flutter-movie-357b1",
-    "storage_bucket": "flutter-movie-357b1.appspot.com"
+    "project_number": "59980459938",
+    "firebase_url": "https://fluttermovie-a1088.firebaseio.com",
+    "project_id": "fluttermovie-a1088",
+    "storage_bucket": "fluttermovie-a1088.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:104929172429:android:d22861a742ff2e48a10284",
+        "mobilesdk_app_id": "1:59980459938:android:df05f1bf418d67df020cfb",
         "android_client_info": {
-          "package_name": "ddthanh.com.vn.movieflutterfirestore"
+          "package_name": "ddthanh.com.vn.flutterappmovie"
         }
       },
       "oauth_client": [
         {
-          "client_id": "104929172429-66nrjkklsogncc5ltvfho8lphviqqis2.apps.googleusercontent.com",
+          "client_id": "59980459938-6gner57v4e8863pkjjtl1ka7bq3d2gqt.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDu2KM30ZhOal-2XMcZkFDI7N5iMYDqmFA"
+          "current_key": "AIzaSyBt9yG_KTJvQZrHmRFPp3Z2qAgt7fwSGq4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "104929172429-66nrjkklsogncc5ltvfho8lphviqqis2.apps.googleusercontent.com",
+              "client_id": "59980459938-6gner57v4e8863pkjjtl1ka7bq3d2gqt.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

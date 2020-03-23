@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>104929172429-qs6ffslaoh37p11uuk3j7tgg4r2ge63d.apps.googleusercontent.com</string>
+	<string>59980459938-ulk64hu8dipecbjg8lfcapc6t6p5asm6.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.104929172429-qs6ffslaoh37p11uuk3j7tgg4r2ge63d</string>
+	<string>com.googleusercontent.apps.59980459938-ulk64hu8dipecbjg8lfcapc6t6p5asm6</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBnTg7CRayvEMFLidDAx2u9YT81HMC0dkQ</string>
+	<string>AIzaSyB97nCcJ9iR2eKX-LG1UDC2c-RFR9EB-dw</string>
 	<key>GCM_SENDER_ID</key>
-	<string>104929172429</string>
+	<string>59980459938</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>ddthanh.com.vn.movieflutterfirestore</string>
+	<string>ddthanh.com.vn.flutterappmovie</string>
 	<key>PROJECT_ID</key>
-	<string>flutter-movie-357b1</string>
+	<string>fluttermovie-a1088</string>
 	<key>STORAGE_BUCKET</key>
-	<string>flutter-movie-357b1.appspot.com</string>
+	<string>fluttermovie-a1088.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:104929172429:ios:e3196ab9c12bea25a10284</string>
+	<string>1:59980459938:ios:6848ba6ddb553d1f020cfb</string>
 	<key>DATABASE_URL</key>
-	<string>https://flutter-movie-357b1.firebaseio.com</string>
+	<string>https://fluttermovie-a1088.firebaseio.com</string>
 </dict>
 </plist>

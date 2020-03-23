@@ -7,36 +7,37 @@ class VideoPage extends StatefulWidget {
 }
 
 class _VideoPageState extends State<VideoPage> {
-
   final _formKey = GlobalKey<FormState>();
+
+  var list = ['1', '2', '3'];
 
   @override
   void initState() {
-//    _readData().then((results) {
-//      setState(() {
-//        cars = results;
-//      });
-//    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Padding(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          children: <Widget>[
-            RaisedButton(
-              child: Text('Get Data'),
-              //onPressed: _readData
-            ),
-
-            //_carList()
-          ],
+    return Center(
+      child: Container(
+        child: ListView.builder(
+          itemCount: list.length,
+          itemBuilder: (context, index) {
+            return Column(
+              children: <Widget>[
+                Image.network(
+                  'https://taimienphi.vn/tmp/cf/aut/demo-nghia-la-gi-2.jpg',
+                  fit: BoxFit.fill,
+                ),
+                Text(
+                  list[index],
+                  style: TextStyle(color: Colors.white, fontSize: 50),
+                )
+              ],
+            );
+          },
         ),
       ),
     );
   }
-
 }

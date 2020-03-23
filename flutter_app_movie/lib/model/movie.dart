@@ -1,28 +1,27 @@
-
 class Movie {
   String id;
   String name;
-  String overview;
-  String time;
-  String imagePoster;
+  int duration;
   String image;
-  String category;
 
-  Movie(
-      this.id,
-      this.name,
-      this.overview,
-      this.time,
-      this.imagePoster,
-      this.image,
-      this.category);
+  Movie({
+    this.id,
+    this.name,
+    this.duration,
+    this.image,
+  });
 
-//  Movie.fromSnapshot(DataSnapshot snapshot) :
-//    id = snapshot.data['id'],
-//    name = snapshot.value['name'],
-//    overview = snapshot.value['overview'],
-//    time = snapshot.value['time'],
-//    imagePoster = snapshot.value['imagePoster'],
-//    image = snapshot.value['image'],
-//    category = snapshot.value['category'];
+  factory Movie.fromJson(Map<String, dynamic> json) => Movie(
+        id: json["id"],
+        name: json["name"],
+        duration: json["duration"],
+        image: json["image"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "duration": duration,
+        "image": image,
+      };
 }

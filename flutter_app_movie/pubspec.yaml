@@ -27,6 +27,7 @@ dependencies:
   cloud_firestore: ^0.13.4+2
   firebase_core: ^0.4.4+3
   smooth_page_indicator: ^0.1.5
+  rxdart: ^0.23.1
 
 dev_dependencies:
   flutter_test:
