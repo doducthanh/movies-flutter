@@ -26,8 +26,14 @@ dependencies:
   cupertino_icons: ^0.1.3
   cloud_firestore: ^0.13.4+2
   firebase_core: ^0.4.4+3
-  smooth_page_indicator: ^0.1.5
   rxdart: ^0.23.1
+  carousel_slider: ^1.4.1
+  dots_indicator: ^1.1.0
+  video_player: ^0.10.8+1
+  encrypt: ^4.0.0
+  bot_toast: ^2.3.1
+  chewie: ^0.9.10
+  flutter_progress_hud: ^1.0.2
 
 dev_dependencies:
   flutter_test:
@@ -49,6 +55,7 @@ flutter:
     - icLogo.png
     - img_poster_film.jpg
     - assets/images/
+    - assets/icons/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

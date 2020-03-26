@@ -1,3 +1,5 @@
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
@@ -7,25 +9,26 @@ import 'package:flutterappmovie/common/value_const.dart';
 import 'package:flutterappmovie/model/actor.dart';
 import 'package:flutterappmovie/model/movie.dart';
 import 'package:flutterappmovie/screen/detail_movie_screen.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../common/colors_const.dart';
 import '../common/image_path_const.dart';
 
 class HomePage extends StatefulWidget {
+  List<Movie> _allMovies = [];
+
+  int indexPageIndicator = 0;
+
   @override
   State<StatefulWidget> createState() {
     return HomePageState();
   }
 }
 
-class HomePageState extends State<HomePage> {
-  PageController _pageController = PageController();
-  List<Movie> _allMovies = [];
+class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   MoviesBloc _moviesBloc = MoviesBloc();
   ActorsBloc _actorsBloc = ActorsBloc();
 
-  int indexPageIndicator = 0;
+  bool isFavourite = false;
 
   @override
   void initState() {
@@ -58,22 +61,27 @@ class HomePageState extends State<HomePage> {
   }
 
   Widget _buildBody() {
-    return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          StreamBuilder<List<Movie>>(
-              stream: _moviesBloc.getMoviesStream,
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(child: CircularProgressIndicator());
-                } else {
-                  _allMovies = snapshot.data;
+    return RefreshIndicator(
+      onRefresh: () async {
+        _moviesBloc.listMovies();
+        _actorsBloc.getListActors();
+      },
+      child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            StreamBuilder<List<Movie>>(
+                stream: _moviesBloc.getMoviesStream,
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    widget._allMovies = [];
+                  } else {
+                    widget._allMovies = snapshot.data;
+                  }
                   return Column(
                     children: <Widget>[
                       Stack(
                         children: <Widget>[
-                          _buildPageViewTrendingWidget(
-                              _pageController, _allMovies),
+                          _buildCaroulSlider(widget._allMovies),
                           Positioned(
                             top: 0,
                             left: 0,
@@ -87,34 +95,9 @@ class HomePageState extends State<HomePage> {
                                 children: <Widget>[
                                   Padding(
                                     padding: const EdgeInsets.all(16),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        Align(
-                                            child: Expanded(
-                                          child: Image(
-                                            image:
-                                                AssetImage('assets/icLogo.png'),
-                                            height: 60,
-                                            fit: BoxFit.fitHeight,
-                                          ),
-                                        )),
-                                        _buildHeaderButtonWidget(),
-                                      ],
-                                    ),
+                                    child: _buildHeaderWidget(),
                                   ),
-                                  Column(
-                                    children: <Widget>[
-                                      _buildPlayButtonWidget(),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 20, 0, 10),
-                                        child: _buildPageIndicator(
-                                            _pageController),
-                                      )
-                                    ],
-                                  )
+                                  _buildPlayButtonWidget()
                                 ],
                               ),
                             ),
@@ -122,11 +105,10 @@ class HomePageState extends State<HomePage> {
                         ],
                       ),
                       _buildListProduct(),
-                      _buildListMoviePopullar(_allMovies),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      _buildListMoviePopullar(_allMovies),
+                      _buildOverviewMovie(),
+                      SizedBox(height: 18,),
+                      _buildListMoviePopullar(widget._allMovies),
+                      _buildListMoviePopullar(widget._allMovies),
                       StreamBuilder<List<Actor>>(
                         stream: _actorsBloc.getSubject.stream,
                         builder: (context, snapshot) {
@@ -140,122 +122,146 @@ class HomePageState extends State<HomePage> {
                       ),
                     ],
                   );
-                }
-              }),
-        ],
+                }),
+          ],
+        ),
       ),
     );
   }
 
-  ///vẽ phần Header gồm ảnh + các button
-  Widget _buildPageViewTrendingWidget(
-      PageController pageController, List<Movie> listMovie) {
-    if (listMovie == null) {
-      return CircularProgressIndicator();
+  ///
+  Widget _buildCaroulSlider(List<Movie> listMovie) {
+    if (listMovie.length == 0) {
+      return _buildLoadingWidget(300);
     } else {
       return Container(
         width: MediaQuery.of(context).size.width,
-        height: 450,
-        child: PageView.builder(
-          onPageChanged: (index) {
-            indexPageIndicator = index;
-          },
-          controller: pageController,
-          itemCount: listMovie.length ?? 0,
-          itemBuilder: (BuildContext context, int index) {
-            var movie = listMovie[index];
-            return Image.network(
-              movie.image,
-              fit: BoxFit.fitWidth,
-            );
-          },
+        child: Column(
+          children: <Widget>[
+            CarouselSlider(
+                height: 300,
+                autoPlay: true,
+                viewportFraction: 1.0,
+                aspectRatio: 2.0,
+                autoPlayInterval: Duration(seconds: 5),
+                onPageChanged: (index) {
+                  setState(() {
+                    widget.indexPageIndicator = index;
+                  });
+                },
+                items: listMovie.map((movie) {
+                  return Image.network(
+                    movie.image,
+                    width: MediaQuery.of(context).size.width,
+                    fit: BoxFit.fitWidth,
+                  );
+                }).toList()),
+            DotsIndicator(
+              dotsCount: listMovie.length,
+              position: widget.indexPageIndicator.toDouble(),
+            )
+          ],
         ),
       );
     }
   }
 
-  Widget _buildPageIndicator(PageController pageController) {
-    return SmoothPageIndicator(
-      controller: pageController,
-      count: _allMovies.length,
-      effect:
-          WormEffect(dotWidth: 10, dotHeight: 10, activeDotColor: Colors.blue),
-    );
-  }
-
   /// vẽ phần header button tìm kiếm, mua gói
-  Widget _buildHeaderButtonWidget() {
+  Widget _buildHeaderWidget() {
     return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: <Widget>[
-          GestureDetector(
-              onTap: _showDialog,
+        child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Align(
+            child: Image(
+          image: AssetImage('assets/icLogo.png'),
+          height: 60,
+          fit: BoxFit.fitHeight,
+        )),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            GestureDetector(
+                onTap: _showDialog,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
+                  child: Container(
+                    padding: EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Colors.white70),
+                    child: Center(
+                      child: Icon(Icons.search),
+                    ),
+                  ),
+                )),
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  isFavourite = !isFavourite;
+                });
+              },
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
                 child: Container(
                   padding: EdgeInsets.all(6),
                   decoration: BoxDecoration(
                       shape: BoxShape.circle, color: Colors.white70),
-                  child: Center(
-                    child: Icon(Icons.search),
-                  ),
+                  child: (isFavourite)
+                      ? Image.asset(
+                          ImagePathConst.icFavouriteRed,
+                          width: 26,
+                          height: 26,
+                        )
+                      : Icon(Icons.favorite),
                 ),
-              )),
-          GestureDetector(
-            onTap: _showDialog,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
-              child: Container(
-                padding: EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle, color: Colors.white70),
-                child: Icon(Icons.favorite),
               ),
             ),
-          ),
-          RaisedButton(
-            onPressed: _showDialog,
-            disabledColor: Colors.orange,
-            color: Colors.orange,
-            shape: RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(18.0),
-            ),
-            child: Text('Mua gói',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: SizeTextConst.textDescripton)),
-          )
-        ],
-      ),
-    );
+            RaisedButton(
+              onPressed: _showDialog,
+              disabledColor: Colors.orange,
+              color: Colors.orange,
+              shape: RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(18.0),
+              ),
+              child: Text('Mua gói',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: SizeTextConst.textDescripton)),
+            )
+          ],
+        ),
+      ],
+    ));
   }
 
   ///ve button play tren poster phim
   Widget _buildPlayButtonWidget() {
     return FlatButton(
-      child: Container(
-        width: 120,
-        height: 40,
-        decoration: BoxDecoration(
-            color: Colors.blueAccent,
-            shape: BoxShape.rectangle,
-            borderRadius: BorderRadius.circular(20.0)),
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Icon(Icons.play_arrow),
-              SizedBox(
-                width: 4,
-              ),
-              Text(
-                'Phát',
-                style: TextStyle(
-                    color: Colors.white, fontSize: SizeTextConst.textTitle),
-              )
-            ],
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 30),
+        child: Container(
+          width: 120,
+          height: 40,
+          decoration: BoxDecoration(
+              color: Colors.blueAccent,
+              shape: BoxShape.rectangle,
+              borderRadius: BorderRadius.circular(20.0)),
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(Icons.play_arrow),
+                SizedBox(
+                  width: 4,
+                ),
+                Text(
+                  'Phát',
+                  style: TextStyle(
+                      color: Colors.white, fontSize: SizeTextConst.textTitle),
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -265,7 +271,8 @@ class HomePageState extends State<HomePage> {
   ///ve list sp sunshine
   Widget _buildListProduct() {
     return Padding(
-      padding: EdgeInsets.fromLTRB(16, 12, 16, 0),
+      padding: EdgeInsets.fromLTRB(
+          PaddingConst.defaultPadding, 12, PaddingConst.defaultPadding, 0),
       child: Column(
         children: <Widget>[
           Align(
@@ -274,21 +281,22 @@ class HomePageState extends State<HomePage> {
                 'SunShine',
                 style: TextStyle(
                   color: Colors.white,
+                  fontWeight: FontWeight.bold,
                   fontSize: SizeTextConst.textTitle,
                 ),
               )),
           Container(
-            height: 110,
+            height: 120,
             child: ListView(
               padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
               scrollDirection: Axis.horizontal,
               children: <Widget>[
-                _buildProductSunshine('', ImagePathConst.imgProduct1),
-                _buildProductSunshine('', ImagePathConst.imgProduct2),
-                _buildProductSunshine('', ImagePathConst.imgProduct3),
-                _buildProductSunshine('', ImagePathConst.imgProduct1),
-                _buildProductSunshine('', ImagePathConst.imgProduct2),
-                _buildProductSunshine('', ImagePathConst.imgProduct3),
+                _buildProductSunshine('SunShine', ImagePathConst.imgProduct1),
+                _buildProductSunshine('SunShine', ImagePathConst.imgProduct2),
+                _buildProductSunshine('SunShine', ImagePathConst.imgProduct3),
+                _buildProductSunshine('SunShine', ImagePathConst.imgProduct1),
+                _buildProductSunshine('SunShine', ImagePathConst.imgProduct2),
+                _buildProductSunshine('SunShine', ImagePathConst.imgProduct3),
               ],
             ),
           ),
@@ -300,7 +308,7 @@ class HomePageState extends State<HomePage> {
   ///ve templet cho 1 sp
   Widget _buildProductSunshine(String overview, String imgPath) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+      padding: const EdgeInsets.fromLTRB(0, 10, 6, 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -335,13 +343,16 @@ class HomePageState extends State<HomePage> {
           Padding(
               padding: const EdgeInsets.only(right: 10),
               child: FittedBox(
-                child: Text(
-                  'tong quan gioi thieu',
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: SizeTextConst.textDescripton),
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Text(
+                    overview,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: SizeTextConst.textDescripton),
+                  ),
                 ),
               ))
         ],
@@ -349,10 +360,52 @@ class HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _buildOverviewMovie() {
+    return Container(
+      child: Container(
+        height: 200,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(ImagePathConst.imgPosterDemo),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  "Fast & Furious 8",
+                  style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.start,
+                ),
+                Text(
+                  "Fast & Furious 8 là phần phim thứ hai trong loạt phim sau"
+                  " The Fast and the Furious: Tokyo Drift (2006) không có sự "
+                  "tham gia của Paul Walker, nam diễn viên đã qua đời trong một"
+                  " tai nạn vào ngày 30 tháng 11 năm 2013 trong thời gian Fast & Furious 7 (2015) đang được bấm máy",
+                  maxLines: 4,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: Colors.white),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   ///danh sach phim thinh hanh trong tuan
   Widget _buildListMoviePopullar(List<Movie> listMovies) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+      padding: const EdgeInsets.fromLTRB(
+          PaddingConst.defaultPadding, 0, PaddingConst.defaultPadding, 0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
@@ -361,52 +414,64 @@ class HomePageState extends State<HomePage> {
               child: Text(
                 'Tất cả',
                 style: TextStyle(
-                    color: Colors.white, fontSize: SizeTextConst.textTitle),
+                    color: Colors.white,
+                    fontSize: SizeTextConst.textTitle,
+                    fontWeight: FontWeight.bold),
               )),
           SizedBox(
             height: 6,
           ),
-          Container(
-              constraints: BoxConstraints(minHeight: 120, maxHeight: 200),
-              child: ListView.builder(
-                  itemCount: listMovies.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    var movie = listMovies[index];
-                    return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            this.context,
-                            MaterialPageRoute(
-                                builder: (context) => DetailMoviePage(
-                                    listMovies[indexPageIndicator])),
-                          );
-                        },
-                        child: _buildTempleMovie(movie.image, movie.name));
-                  })),
+          (listMovies.length == 0)
+              ? _buildLoadingWidget(180)
+              : Container(
+                  constraints: BoxConstraints(minHeight: 120, maxHeight: 220),
+                  child: ListView.builder(
+                      itemCount: listMovies.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        if (listMovies == null) {
+                          return CircularProgressIndicator();
+                        } else {
+                          var movie = listMovies[index];
+                          return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  this.context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          DetailMoviePage(movie)),
+                                );
+                              },
+                              child:
+                                  _buildTempleMovie(movie.image, movie.name));
+                        }
+                      })),
         ],
       ),
     );
   }
 
   Widget _buildTempleMovie(String imgPath, String title) {
-    return Center(
+    return Container(
+      constraints: BoxConstraints(minHeight: 150, maxHeight: 220),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
         child: Column(
           children: <Widget>[
-            Expanded(
-                child: Image.network(
+            Image.network(
               imgPath,
               fit: BoxFit.fitHeight,
-            )),
+              height: 170,
+            ),
             SizedBox(
               height: 6,
             ),
             Text(
               title,
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                  color: Colors.white, fontSize: SizeTextConst.textDescripton),
+                  color: Colors.white70,
+                  fontSize: SizeTextConst.textDescripton),
             )
           ],
         ),
@@ -416,7 +481,7 @@ class HomePageState extends State<HomePage> {
 
   Widget _buildListActors(List<Actor> listActor) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
       child: Column(
         children: <Widget>[
           SizedBox(
@@ -427,41 +492,62 @@ class HomePageState extends State<HomePage> {
               child: Text(
                 'Top diễn viên hành động',
                 style: TextStyle(
-                    color: Colors.white, fontSize: SizeTextConst.textTitle),
+                    color: Colors.white,
+                    fontSize: SizeTextConst.textTitle,
+                    fontWeight: FontWeight.bold),
               )),
-          Container(
-            height: 150,
-            child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: listActor.length,
-                itemBuilder: (context, index) {
-                  var actor = listActor[index];
-                  return Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 10, 8, 8),
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          width: 100,
-                          height: 100,
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: NetworkImage(actor.image))),
-                        ),
-                        Text(
-                          actor.name,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: SizeTextConst.textDescripton),
-                        )
-                      ],
-                    ),
-                  );
-                }),
-          ),
+          (listActor.length == 0)
+              ? CircularProgressIndicator()
+              : Container(
+                  height: 150,
+                  child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: listActor.length,
+                      itemBuilder: (context, index) {
+                        if (listActor == null) {
+                          return CircularProgressIndicator();
+                        } else {
+                          var actor = listActor[index];
+                          return Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 10, 8, 8),
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  width: 80,
+                                  height: 80,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          fit: BoxFit.fill,
+                                          image: NetworkImage(actor.image))),
+                                ),
+                                Text(
+                                  actor.name,
+                                  style: TextStyle(
+                                      color: Colors.white70,
+                                      fontSize: SizeTextConst.textDescripton),
+                                )
+                              ],
+                            ),
+                          );
+                        }
+                      }),
+                ),
         ],
       ),
     );
   }
+
+  Widget _buildLoadingWidget(double height) {
+    return Container(
+      height: height,
+      child: Center(
+          child: Container(
+              width: 30, height: 30, child: CircularProgressIndicator())),
+    );
+  }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
