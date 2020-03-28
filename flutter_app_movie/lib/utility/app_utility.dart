@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutterappmovie/common/app_const.dart';
 import 'package:encrypt/encrypt.dart';
 import 'package:flutterappmovie/common/cache.dart';
@@ -24,4 +25,12 @@ class AppUtility {
     }
   }
 
+  ///check 1 bien string co null hoac rong ko.
+  static bool stringNullOrEmpty(String text) {
+    if ((text == null) || (text.isEmpty)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

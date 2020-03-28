@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
-import 'package:flutterappmovie/bloc/login_bloc.dart';
+import 'package:flutterappmovie/bloc/account_bloc.dart';
 import 'package:flutterappmovie/common/image_path_const.dart';
 import 'package:flutterappmovie/screen/login/login_screen.dart';
 
@@ -12,7 +12,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
 
-  var _registerBloc = LoginBloc();
+  var _accountBloc = AccountBloc();
   var _usernameController = TextEditingController();
   var _passController = TextEditingController();
   var _emailController = TextEditingController();
@@ -25,7 +25,7 @@ class _RegisterPageState extends State<RegisterPage> {
         leading: FlatButton(
           child: IconButton(icon: Icon(Icons.arrow_back_ios),),
           onPressed: (){
-            Navigator.pushReplacement(context,
+            Navigator.pop(context,
                 CupertinoPageRoute(builder: (context) => LoginPage()));
           },
         ),
@@ -66,12 +66,12 @@ class _RegisterPageState extends State<RegisterPage> {
       Padding(
         padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
         child: StreamBuilder<String>(
-          stream: _registerBloc.getUserNameStream,
+          stream: _accountBloc.getUserNameStream,
           builder: (context, snapshot) {
             var textError = (snapshot.hasData) ? snapshot.data : null;
             return TextField(
               controller: _usernameController,
-              onTap: _registerBloc.resetUsernameTextField,
+              onTap: _accountBloc.resetUsernameTextField,
               cursorRadius: Radius.circular(12),
               decoration: InputDecoration(
                 hintText: 'Username',
@@ -93,12 +93,12 @@ class _RegisterPageState extends State<RegisterPage> {
       Padding(
         padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
         child: StreamBuilder<String>(
-          stream: _registerBloc.getPasswordStream,
+          stream: _accountBloc.getPasswordStream,
           builder: (context, snapshot) {
             var textError = (snapshot.hasData) ? snapshot.data : null;
             return TextField(
               controller: _passController,
-              onTap: _registerBloc.resetPasswordTextField,
+              onTap: _accountBloc.resetPasswordTextField,
               cursorRadius: Radius.circular(12),
               decoration: InputDecoration(
                 hintText: 'Password',
@@ -119,12 +119,12 @@ class _RegisterPageState extends State<RegisterPage> {
       Padding(
         padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
         child: StreamBuilder<String>(
-          stream: _registerBloc.getEmailStream,
+          stream: _accountBloc.getEmailStream,
           builder: (context, snapshot) {
             var textError = (snapshot.hasData) ? snapshot.data : null;
             return TextField(
               controller: _emailController,
-              onTap: _registerBloc.resetEmailTextField,
+              onTap: _accountBloc.resetEmailTextField,
               cursorRadius: Radius.circular(12),
               decoration: InputDecoration(
                 hintText: 'Email',
@@ -151,12 +151,12 @@ class _RegisterPageState extends State<RegisterPage> {
         onPressed: ()async{
           final hub = ProgressHUD.of(context);
           hub.show();
-          bool result = await _registerBloc.register(
+          bool result = await _accountBloc.register(
               _usernameController.text,
               _passController.text,
               _emailController.text);
           if (result) {
-            Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context) => LoginPage(username: _usernameController.text)));
+            Navigator.pop(context, _usernameController.text);
           } else {
             hub.dismiss();
           }

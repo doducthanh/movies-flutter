@@ -1,6 +1,11 @@
+
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterappmovie/bloc/account_bloc.dart';
 import 'package:flutterappmovie/common/app_const.dart';
+import 'package:flutterappmovie/common/cache.dart';
+import 'package:flutterappmovie/screen/account_screen.dart';
 import 'package:flutterappmovie/screen/activity_screen.dart';
 import 'package:flutterappmovie/screen/login/login_screen.dart';
 import 'package:flutterappmovie/screen/videos_screen.dart';
@@ -15,6 +20,10 @@ class MainPage extends StatefulWidget {
   State<StatefulWidget> createState() {
     return MainPageState();
   }
+
+  AccountBloc _accountBloc = AccountBloc();
+
+  bool isLogin = false;
 }
 
 class MainPageState extends State<MainPage> {
@@ -32,8 +41,43 @@ class MainPageState extends State<MainPage> {
   _selectedBottomBar(int index) {
     setState(() {
       _currentSelected = index;
-      //_widgetVisiable = _getViewByBottomBar(index);
     });
+  }
+
+  _actionAfterLogin() async {
+    BotToast.showSimpleNotification(title: "Đăng nhập thành công");
+    setState(() {
+      widget.isLogin = true;
+      AppCaches.isLogin = true;
+    });
+  }
+
+  _actionLogout() async {
+    bool result = await widget._accountBloc.signout();
+    if (result) {
+      BotToast.showSimpleNotification(title: "Đăng xuất thành công");
+      setState(() {
+        widget.isLogin = false;
+        AppCaches.isLogin = false;
+        AppCaches.userId = null;
+      });
+    }
+  }
+
+  _showDialog(String text) {
+    Scaffold.of(context).showSnackBar(SnackBar(
+      backgroundColor: Colors.white,
+      duration: Duration(milliseconds: 400),
+      content: Text(
+        text,
+        style: TextStyle(color: Colors.green, fontSize: 14),
+      ),
+    ));
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -51,12 +95,13 @@ class MainPageState extends State<MainPage> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Container(
-          child: Icon(Icons.perm_identity),
+          child: widget.isLogin ? Icon(Icons.arrow_forward) :Icon(Icons.perm_identity),
         ),
         onPressed: (){
-          Navigator.pushReplacement(
+          AppCaches.isLogin ? _actionLogout() :
+          Navigator.push(
               context,
-              CupertinoPageRoute(builder: (context) => LoginPage())
+              CupertinoPageRoute(builder: (context) => LoginPage(loginCallback: _actionAfterLogin))
           );
         },
       ),
@@ -94,11 +139,18 @@ class MainPageState extends State<MainPage> {
             offstage: _currentSelected != 4,
             child: new TickerMode(
               enabled: _currentSelected == 4,
-              child:  new Text('4'),
+              child:  AccountPage(),
             ),
           ),
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    widget._accountBloc.dispose();
   }
 }

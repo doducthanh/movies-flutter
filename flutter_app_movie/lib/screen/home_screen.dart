@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterappmovie/bloc/actors_bloc.dart';
 import 'package:flutterappmovie/bloc/movies_bloc.dart';
 import 'package:flutterappmovie/common/value_const.dart';
+import 'package:flutterappmovie/model/account.dart';
 import 'package:flutterappmovie/model/actor.dart';
 import 'package:flutterappmovie/model/movie.dart';
 import 'package:flutterappmovie/screen/detail_movie_screen.dart';
@@ -17,6 +18,10 @@ class HomePage extends StatefulWidget {
   List<Movie> _allMovies = [];
 
   int indexPageIndicator = 0;
+
+  Account account;
+
+  HomePage({this.account = null});
 
   @override
   State<StatefulWidget> createState() {
@@ -172,12 +177,18 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
         child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Align(
-            child: Image(
-          image: AssetImage('assets/icLogo.png'),
-          height: 60,
-          fit: BoxFit.fitHeight,
-        )),
+        Row(
+          children: <Widget>[
+            Align(
+                child: Image(
+                  image: AssetImage('assets/icLogo.png'),
+                  height: 60,
+                  fit: BoxFit.fitHeight,
+                )),
+        ]
+
+        ),
+
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -374,7 +385,7 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
           child: Align(
             alignment: Alignment.bottomCenter,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Text(
                   "Fast & Furious 8",
@@ -392,7 +403,8 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
                   maxLines: 4,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(color: Colors.white),
-                )
+                ),
+                SizedBox(height: 4,)
               ],
             ),
           ),
@@ -439,7 +451,7 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
                                   this.context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          DetailMoviePage(movie)),
+                                          DetailMoviePage(movie, listMovies)),
                                 );
                               },
                               child:

@@ -6,7 +6,6 @@ class Movie {
   String overview;
   String director;
   String actors;
-
   Movie(
       {this.id,
       this.name,

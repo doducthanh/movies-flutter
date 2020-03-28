@@ -26,7 +26,7 @@ class _VideoPageState extends State<VideoPage> {
             return Column(
               children: <Widget>[
                 Image.network(
-                  'https://taimienphi.vn/tmp/cf/aut/demo-nghia-la-gi-2.jpg',
+                  'https://www.cgv.vn/media/catalog/product/cache/1/small_image/240x388/dd828b13b1cb77667d034d5f59a82eb6/n/a/nang3-1-poster-scaled-cgv_1.jpg',
                   fit: BoxFit.fill,
                 ),
                 Text(

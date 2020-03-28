@@ -1,8 +1,12 @@
-import 'package:flutter/cupertino.dart';
+
+import 'package:flutter/services.dart';
+import 'package:flutterappmovie/common/cache.dart';
+import 'package:flutterappmovie/model/account.dart';
 import 'package:flutterappmovie/repository/firebase_repository.dart';
+import 'package:flutterappmovie/utility/app_utility.dart';
 import 'package:rxdart/rxdart.dart';
 
-class LoginBloc {
+class AccountBloc {
   BehaviorSubject<String> _userNameObject = BehaviorSubject<String>();
   get getUserNameStream => _userNameObject.stream;
 
@@ -63,37 +67,54 @@ class LoginBloc {
     _emailObject.sink.add(null);
   }
 
-  void dispose() {
-    _userNameObject.close();
-    _emailObject.close();
-    _passwordObject.close();
-  }
-
   Future<bool> register(String username, String password, String email) async {
     validateUserName(username);
     validatePassword(password);
     validateEmail(email);
     if (validateEmail(email) && (validateUserName(username) && validatePassword(password))) {
-      return await _firebaseReposity.addUser(username, password, email);
+      try {
+        String id = await _firebaseReposity.signUp(email, password);
+        if (!AppUtility.stringNullOrEmpty(id)) {
+          return await _firebaseReposity.addUser(id, username, password, email);
+        } else {
+          return false;
+        }
+      } catch(e) {
+        if (e is PlatformException) {
+          return false;
+        }
+      }
     } else {
       return false;
     }
   }
 
-  Future<bool> login(String username, String password) async {
-    var result = false;
-    validateUserName(username);
+  Future<bool> login(String email, String password) async {
+    String result;
+    validateEmail(email);
     validatePassword(password);
-    if (validateUserName(username) && validatePassword(password)) {
-      var listAccount = await _firebaseReposity.getAllAccount();
-      listAccount.forEach((account) {
-        if ((account.username == username) && (account.password == password)) {
-          result = true;
-        }
-      });
-      return result;
+    if (validateEmail(email) && validatePassword(password)) {
+      result = await _firebaseReposity.signIn(email, password);
+      if (result != null) { AppCaches.userId = result;}
+      return !(result == null);
     } else {
       return false;
     }
   }
+
+  Future<Account> getAccount(String userId) async {
+    Account account = await _firebaseReposity.getCurrentUser(userId);
+    return account;
+  }
+
+  Future<bool> signout() async {
+    return await _firebaseReposity.signOut();
+  }
+
+  void dispose() {
+    _userNameObject.close();
+    _emailObject.close();
+    _passwordObject.close();
+}
+
 }

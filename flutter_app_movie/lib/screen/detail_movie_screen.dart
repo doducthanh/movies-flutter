@@ -2,22 +2,25 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterappmovie/bloc/movies_bloc.dart';
+import 'package:flutterappmovie/common/cache.dart';
 import 'package:flutterappmovie/common/colors_const.dart';
 import 'package:flutterappmovie/common/image_path_const.dart';
 import 'package:flutterappmovie/common/value_const.dart';
 import 'package:flutterappmovie/model/movie.dart';
 import 'package:flutterappmovie/screen/playing_screen.dart';
 import 'package:flutterappmovie/utility/app_utility.dart';
-import 'package:video_player/video_player.dart';
-
 import 'login/login_screen.dart';
 
 enum StateVideoPlay { notPlay, play, pause }
 
 class DetailMoviePage extends StatefulWidget {
-  final Movie movie;
+  Movie movie;
+  final List<Movie> listMovie;
 
-  DetailMoviePage(this.movie);
+  DetailMoviePage(this.movie, this.listMovie);
+
+  MoviesBloc _moviesBloc = MoviesBloc();
 
   @override
   _DetailMoviePageState createState() => _DetailMoviePageState();
@@ -25,7 +28,7 @@ class DetailMoviePage extends StatefulWidget {
 
 class _DetailMoviePageState extends State<DetailMoviePage> {
   StateVideoPlay stateVideo = StateVideoPlay.notPlay;
-
+  ScrollController _scrollController = ScrollController();
   var isFavourite = false;
 
   @override
@@ -40,20 +43,16 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
 
   Widget _buildBodyWidget() {
     return Container(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
-      height: MediaQuery
-          .of(context)
-          .size
-          .height,
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
       color: ColorsConst.mainColor,
       child: SingleChildScrollView(
+        controller: _scrollController,
         child: Column(
           children: <Widget>[
             _buildHeaderWidget(),
-            _buildDecriptionWidget(),
+            //_buildDecriptionWidget(),
+            _buildGridMoive(widget.listMovie),
           ],
         ),
       ),
@@ -74,43 +73,43 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
                       height: 280,
                       child: PlayingPage(
                           url:
-                          'http://www.sample-videos.com/video123/mp4/720/big_buck_bunny_720p_20mb.mp4')),
+                              'http://www.sample-videos.com/video123/mp4/720/big_buck_bunny_720p_20mb.mp4')),
                 ),
                 _builIconClose(),
               ],
             ),
           ),
           Visibility(
-            visible: (stateVideo == StateVideoPlay.notPlay),
-            child: Stack(
-              children: <Widget>[
-                Container(
-                  height: 350,
-                  decoration: new BoxDecoration(
-                    image: new DecorationImage(
-                      image: NetworkImage(widget.movie.image),
-                      fit: BoxFit.fitWidth,
+              visible: (stateVideo == StateVideoPlay.notPlay),
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    height: 350,
+                    decoration: new BoxDecoration(
+                      image: new DecorationImage(
+                        image: NetworkImage(widget.movie.image),
+                        fit: BoxFit.fitWidth,
+                      ),
+                    ),
+                    child: new BackdropFilter(
+                      filter: new ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                      child: new Container(
+                        decoration: new BoxDecoration(
+                            color: Colors.black.withOpacity(0.5)),
+                      ),
                     ),
                   ),
-                  child: new BackdropFilter(
-                    filter: new ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-                    child: new Container(
-                      decoration: new BoxDecoration(
-                          color: Colors.black.withOpacity(0.5)),
+                  SafeArea(
+                    child: Column(
+                      children: <Widget>[
+                        _builIconClose(),
+                        _buildImageAndNameMovie(),
+                        _buildButtonPlay(),
+                      ],
                     ),
-                  ),),
-                SafeArea(
-                  child: Column(
-                    children: <Widget>[
-                      _builIconClose(),
-                      _buildImageAndNameMovie(),
-                      _buildButtonPlay(),
-                    ],
                   ),
-                ),
-              ],
-            )
-          ),
+                ],
+              )),
           //_buildProgessBar()
           _buildOverviewMovie(),
           _buildFavouriteWidget(),
@@ -141,7 +140,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
             width: 30,
             height: 30,
             decoration:
-            BoxDecoration(shape: BoxShape.circle, color: Colors.white70),
+                BoxDecoration(shape: BoxShape.circle, color: Colors.white70),
             child: Icon(Icons.close),
           ),
         ),
@@ -162,11 +161,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
           padding: EdgeInsets.only(top: 10, bottom: 2),
           child: Text(
             widget.movie.name,
-            style: Theme
-                .of(context)
-                .textTheme
-                .bodyText2
-                .copyWith(
+            style: Theme.of(context).textTheme.bodyText2.copyWith(
                 color: Colors.white, fontSize: SizeTextConst.textTitle),
           ),
         ),
@@ -178,11 +173,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
               Expanded(
                 child: Center(
                   child: Text('2019',
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .bodyText2
-                          .copyWith(
+                      style: Theme.of(context).textTheme.bodyText2.copyWith(
                           color: Colors.white70,
                           fontSize: SizeTextConst.textTitle)),
                 ),
@@ -191,11 +182,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
                 child: Center(
                   child: Text(
                     '120 phut',
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .bodyText2
-                        .copyWith(
+                    style: Theme.of(context).textTheme.bodyText2.copyWith(
                         color: Colors.white70,
                         fontSize: SizeTextConst.textTitle),
                   ),
@@ -226,8 +213,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
           children: <Widget>[
             Icon(Icons.play_arrow),
             Text('Phát',
-                style: Theme
-                    .of(context)
+                style: Theme.of(context)
                     .textTheme
                     .bodyText2
                     .copyWith(color: Colors.white))
@@ -258,8 +244,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
           Container(
             child: Text(
               widget.movie.overview,
-              style: Theme
-                  .of(context)
+              style: Theme.of(context)
                   .textTheme
                   .bodyText2
                   .copyWith(color: Colors.white),
@@ -272,8 +257,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
             alignment: Alignment.topLeft,
             child: Text(
               'Đạo diễn: ${widget.movie.director}',
-              style: Theme
-                  .of(context)
+              style: Theme.of(context)
                   .textTheme
                   .bodyText2
                   .copyWith(color: Colors.white70),
@@ -284,8 +268,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
             alignment: Alignment.topLeft,
             child: Text(
               'Diễn viên: ${widget.movie.actors}',
-              style: Theme
-                  .of(context)
+              style: Theme.of(context)
                   .textTheme
                   .bodyText2
                   .copyWith(color: Colors.white70),
@@ -303,108 +286,162 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
         children: <Widget>[
           Container(
               child: FlatButton(
-                onPressed: () {
-                  setState(() {
-                    isFavourite = !isFavourite;
-                  });
-                  if (AppUtility.isLogin()) {} else {
-                    _showDialogFavouriteMovie();
-                  }
-                },
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      width: 36,
-                      height: 36,
-                      decoration:
+            onPressed: () {
+              if (AppUtility.isLogin()) {
+                widget._moviesBloc
+                    .addFavouriteMovie(widget.movie, AppCaches.userId);
+                setState(() {
+                  isFavourite = !isFavourite;
+                });
+              } else {
+                _showDialogFavouriteMovie();
+              }
+            },
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration:
                       BoxDecoration(shape: BoxShape.circle, color: Colors.grey),
-                      child: (isFavourite)
-                          ? Padding(
-                        padding: const EdgeInsets.all(3.0),
-                        child: Image.asset(
-                          ImagePathConst.icFavouriteRed,
-                        ),
-                      )
-                          : Icon(Icons.favorite),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(top: 4),
-                      child: Text(
-                        'Yêu thích',
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .bodyText2
-                            .copyWith(color: Colors.white70),
-                      ),
-                    )
-                  ],
+                  child: (AppUtility.isLogin())
+                      ? Padding(
+                          padding: const EdgeInsets.all(3.0),
+                          child: Image.asset(
+                            ImagePathConst.icFavouriteRed,
+                          ),
+                        )
+                      : Icon(Icons.favorite),
                 ),
-              )),
+                Container(
+                  padding: EdgeInsets.only(top: 4),
+                  child: Text(
+                    'Yêu thích',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText2
+                        .copyWith(color: Colors.white70),
+                  ),
+                )
+              ],
+            ),
+          )),
           Container(
               child: FlatButton(
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      width: 36,
-                      height: 36,
-                      decoration:
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration:
                       BoxDecoration(shape: BoxShape.circle, color: Colors.grey),
-                      child: Icon(Icons.message),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(top: 4),
-                      child: Text(
-                        'Bình luận',
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .bodyText2
-                            .copyWith(color: Colors.white70),
-                      ),
-                    )
-                  ],
+                  child: Icon(Icons.message),
                 ),
-              )),
+                Container(
+                  padding: EdgeInsets.only(top: 4),
+                  child: Text(
+                    'Bình luận',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText2
+                        .copyWith(color: Colors.white70),
+                  ),
+                )
+              ],
+            ),
+          )),
           Container(
               child: FlatButton(
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      width: 36,
-                      height: 36,
-                      decoration:
+            child: Column(
+              children: <Widget>[
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration:
                       BoxDecoration(shape: BoxShape.circle, color: Colors.grey),
-                      child: Icon(Icons.share),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(top: 4),
-                      child: Text(
-                        'Chia sẻ',
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .bodyText2
-                            .copyWith(color: Colors.white70),
-                      ),
-                    )
-                  ],
+                  child: Icon(Icons.share),
                 ),
-              )),
+                Container(
+                  padding: EdgeInsets.only(top: 4),
+                  child: Text(
+                    'Chia sẻ',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText2
+                        .copyWith(color: Colors.white70),
+                  ),
+                )
+              ],
+            ),
+          )),
         ],
       ),
     );
   }
 
-  Widget _buildDecriptionWidget() {
-    return Container(
-      height: 300,
-      child: _buildVideoPlayer(""),
-    );
-  }
+  Widget _buildGridMoive(List<Movie> listMovie) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 10, 16, 0),
+      child: Column(
+        children: <Widget>[
+          SizedBox(
+            height: 10,
+          ),
+          Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              "Tương tự",
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText1
+                  .copyWith(color: Colors.white, fontSize: 20),
+            ),
+          ),
+          SizedBox(height: 10,),
+          Container(
+              height: 430,
+              width: double.infinity,
+              child: GridView.count(
+                childAspectRatio: 3/2,
+                shrinkWrap: true,
+                //physics: const NeverScrollableScrollPhysics(),
+                crossAxisCount: 2,
+                controller: ScrollController(
+                  keepScrollOffset: false,
+                ),
+                scrollDirection: Axis.horizontal,
+                children: listMovie.map((movie) {
+                  return GestureDetector(
+                    onTap: (){
+                      _scrollController.animateTo(0, duration: Duration(milliseconds: 500), curve: Curves.ease);
+                      setState(() {
+                        widget.movie = movie;
+                      });
 
-  Widget _buildVideoPlayer(String url) {
-    return Container();
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Image.network(
+                          movie.image,
+                          height: 180,
+                          fit: BoxFit.fitHeight,
+                        ),
+                        SizedBox(height: 10,),
+                        Text(
+                          movie.name,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText2
+                              .copyWith(color: Colors.white70, fontSize: 14),
+                        )
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ))
+        ],
+      ),
+    );
   }
 
   void _showDialogFavouriteMovie() {
@@ -431,5 +468,12 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
             ],
           );
         });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    widget._moviesBloc.dispose();
   }
 }

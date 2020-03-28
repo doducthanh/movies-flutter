@@ -1,23 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
-import 'package:flutterappmovie/bloc/login_bloc.dart';
+import 'package:flutterappmovie/bloc/account_bloc.dart';
 import 'package:flutterappmovie/common/cache.dart';
 import 'package:flutterappmovie/common/image_path_const.dart';
 import 'package:flutterappmovie/screen/login/register_screen.dart';
 import 'package:flutterappmovie/screen/main_screen.dart';
+import 'package:flutterappmovie/utility/app_utility.dart';
 
 class LoginPage extends StatefulWidget {
-  String username;
+  Function loginCallback;
 
-  LoginPage({Key key, this.username = ""}) : super(key: key);
+  LoginPage({Key key, this.loginCallback})
+      : super(key: key);
 
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  var _loginBloc = LoginBloc();
+  AccountBloc _accountBloc = AccountBloc();
   var _usernameController = TextEditingController();
   var _passwordController = TextEditingController();
   var isLoading = false;
@@ -26,9 +28,21 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      _usernameController.text = widget.username;
-    });
+  }
+
+  actionLogin(BuildContext context) async {
+    ProgressHUD.of(context).show();
+    if (await _accountBloc.login(
+        _usernameController.text, _passwordController.text)) {
+      print("ddthanh: dang nhap thanh cong");
+      ProgressHUD.of(context).dismiss();
+      AppCaches.isLogin = true;
+      widget.loginCallback();
+      Navigator.pop(context);
+    } else {
+      ProgressHUD.of(context).dismiss();
+      print("ddthanh: dang nhap that bai");
+    }
   }
 
   @override
@@ -41,14 +55,14 @@ class _LoginPageState extends State<LoginPage> {
             icon: Icon(Icons.arrow_back_ios),
           ),
           onPressed: () {
-            Navigator.pushReplacement(context,
-                CupertinoPageRoute(builder: (context) => MainPage()));
+            Navigator.pop(
+                context, CupertinoPageRoute(builder: (context) => MainPage()));
           },
         ),
       ),
-      body: ProgressHUD(child: Builder(
-        builder: (context) => Container(child:_buildBodyWidget(context))),
-      ) ,
+
+      body: ProgressHUD(child: Builder(builder: (context) => Container(child: _buildBodyWidget(context)))),
+
     );
   }
 
@@ -86,11 +100,11 @@ class _LoginPageState extends State<LoginPage> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
       child: StreamBuilder<String>(
-          stream: _loginBloc.getUserNameStream,
+          stream: _accountBloc.getUserNameStream,
           builder: (context, snapshot) {
             textError = (snapshot.hasData) ? snapshot.data : null;
             return TextField(
-              onTap: _loginBloc.resetUsernameTextField,
+              onTap: _accountBloc.resetUsernameTextField,
               controller: _usernameController,
               cursorRadius: Radius.circular(12),
               decoration: InputDecoration(
@@ -109,11 +123,11 @@ class _LoginPageState extends State<LoginPage> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
       child: StreamBuilder<String>(
-          stream: _loginBloc.getPasswordStream,
+          stream: _accountBloc.getPasswordStream,
           builder: (context, snapshot) {
             var textError = (snapshot.hasData) ? snapshot.data : null;
             return TextField(
-              onTap: _loginBloc.resetPasswordTextField,
+              onTap: _accountBloc.resetPasswordTextField,
               controller: _passwordController,
               cursorRadius: Radius.circular(12),
               decoration: InputDecoration(
@@ -137,16 +151,21 @@ class _LoginPageState extends State<LoginPage> {
           'Đăng nhập',
           style: TextStyle(color: Colors.white, fontSize: 16),
         ),
-        onPressed: () async {
-          final hub = ProgressHUD.of(context);
-          hub.show();
-          if (await _loginBloc.login(
-              _usernameController.text, _passwordController.text)) {
+        onPressed: ()async {
+          ProgressHUD.of(context).show();
+          var result = await _accountBloc.login(
+              _usernameController.text, _passwordController.text);
+          if (result) {
             print("ddthanh: dang nhap thanh cong");
+            ProgressHUD.of(context).dismiss();
             AppCaches.isLogin = true;
+            if (widget.loginCallback != null) {
+              widget.loginCallback();
+            }
+
             Navigator.pop(context);
           } else {
-            hub.dismiss();
+            ProgressHUD.of(context).dismiss();
             print("ddthanh: dang nhap that bai");
           }
         },
@@ -166,10 +185,22 @@ class _LoginPageState extends State<LoginPage> {
           style: TextStyle(color: Colors.black54, fontSize: 16),
         ),
         onPressed: () {
-          Navigator.pushReplacement(context,
+          Navigator.push(context,
               CupertinoPageRoute(builder: (context) => (RegisterPage())));
         },
       ),
     );
+  }
+
+  _navigatorRegister() async {
+    String result = await Navigator.push(context,
+      CupertinoPageRoute(builder: (context) => (RegisterPage()))
+    );
+    if (AppUtility.stringNullOrEmpty(result)) {
+      setState(() {
+        _usernameController.text = result;
+      });
+
+    }
   }
 }
