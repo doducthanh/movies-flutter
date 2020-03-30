@@ -1,5 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterappmovie/screen/item_video_screen.dart';
 
 class VideoPage extends StatefulWidget {
   @override
@@ -7,36 +8,21 @@ class VideoPage extends StatefulWidget {
 }
 
 class _VideoPageState extends State<VideoPage> {
-  final _formKey = GlobalKey<FormState>();
-
-  var list = ['1', '2', '3'];
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        child: ListView.builder(
-          itemCount: list.length,
-          itemBuilder: (context, index) {
-            return Column(
-              children: <Widget>[
-                Image.network(
-                  'https://www.cgv.vn/media/catalog/product/cache/1/small_image/240x388/dd828b13b1cb77667d034d5f59a82eb6/n/a/nang3-1-poster-scaled-cgv_1.jpg',
-                  fit: BoxFit.fill,
-                ),
-                Text(
-                  list[index],
-                  style: TextStyle(color: Colors.white, fontSize: 50),
-                )
-              ],
-            );
-          },
-        ),
+    return Scaffold(
+      appBar: AppBar(title: Text("Watch", style: TextStyle(color: Colors.black, fontSize: 30, fontWeight: FontWeight.bold),),),
+      body: Container(
+        child: ListView.separated(
+            scrollDirection: Axis.vertical,
+            itemBuilder: (context, index) {
+              return ItemVideo();
+            },
+            separatorBuilder: (context, index) => Container(
+              height: 16,
+              color: Color(0xffe4e4e4),
+            ),
+            itemCount: 10),
       ),
     );
   }

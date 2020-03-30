@@ -9,16 +9,8 @@ class AccountPage extends StatefulWidget {
 class _AccountPageState extends State<AccountPage> {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            _buildInforWidget(),
-            _buildListWidget()
-          ],
-        ),
-      ),
+    return Container(
+
     );
   }
 

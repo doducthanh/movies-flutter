@@ -9,6 +9,7 @@ import 'package:flutterappmovie/common/value_const.dart';
 import 'package:flutterappmovie/model/account.dart';
 import 'package:flutterappmovie/model/actor.dart';
 import 'package:flutterappmovie/model/movie.dart';
+import 'package:flutterappmovie/module_example/dartboard_list_tutorial.dart';
 import 'package:flutterappmovie/screen/detail_movie_screen.dart';
 
 import '../common/colors_const.dart';
@@ -21,7 +22,7 @@ class HomePage extends StatefulWidget {
 
   Account account;
 
-  HomePage({this.account = null});
+  HomePage({this.account});
 
   @override
   State<StatefulWidget> createState() {
@@ -72,7 +73,7 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
         _actorsBloc.getListActors();
       },
       child: SingleChildScrollView(
-        child: Column(
+        child: Wrap(
           children: <Widget>[
             StreamBuilder<List<Movie>>(
                 stream: _moviesBloc.getMoviesStream,
@@ -111,7 +112,9 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
                       ),
                       _buildListProduct(),
                       _buildOverviewMovie(),
-                      SizedBox(height: 18,),
+                      SizedBox(
+                        height: 18,
+                      ),
                       _buildListMoviePopullar(widget._allMovies),
                       _buildListMoviePopullar(widget._allMovies),
                       StreamBuilder<List<Actor>>(
@@ -177,18 +180,14 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
         child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Row(
-          children: <Widget>[
-            Align(
-                child: Image(
-                  image: AssetImage('assets/icLogo.png'),
-                  height: 60,
-                  fit: BoxFit.fitHeight,
-                )),
-        ]
-
-        ),
-
+        Row(children: <Widget>[
+          Align(
+              child: Image(
+            image: AssetImage('assets/icLogo.png'),
+            height: 60,
+            fit: BoxFit.fitHeight,
+          )),
+        ]),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -318,55 +317,62 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
 
   ///ve templet cho 1 sp
   Widget _buildProductSunshine(String overview, String imgPath) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 10, 6, 10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            constraints: BoxConstraints(minHeight: 60, maxHeight: 70),
-            child: Stack(
-              children: <Widget>[
-                Image(
-                  image: AssetImage(imgPath),
-                  height: 70,
-                  fit: BoxFit.fitWidth,
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(4, 4, 0, 0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.redAccent,
-                        borderRadius: BorderRadius.circular(4.0)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(2.0),
-                      child: FittedBox(
-                          child: Text(
-                        '09 33',
-                        style: TextStyle(color: Colors.white, fontSize: 8),
-                      )),
+    return GestureDetector(
+      onTap: (){
+        Navigator.push(context,
+          MaterialPageRoute(builder: (context) => DardBoardPage())
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 10, 6, 10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              constraints: BoxConstraints(minHeight: 60, maxHeight: 70),
+              child: Stack(
+                children: <Widget>[
+                  Image(
+                    image: AssetImage(imgPath),
+                    height: 70,
+                    fit: BoxFit.fitWidth,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(4, 4, 0, 0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.redAccent,
+                          borderRadius: BorderRadius.circular(4.0)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: FittedBox(
+                            child: Text(
+                          '09 33',
+                          style: TextStyle(color: Colors.white, fontSize: 8),
+                        )),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: FittedBox(
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Text(
+                      overview,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: SizeTextConst.textDescripton),
                     ),
                   ),
-                )
-              ],
-            ),
-          ),
-          Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: FittedBox(
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Text(
-                    overview,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: SizeTextConst.textDescripton),
-                  ),
-                ),
-              ))
-        ],
+                ))
+          ],
+        ),
       ),
     );
   }
@@ -404,7 +410,9 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(color: Colors.white),
                 ),
-                SizedBox(height: 4,)
+                SizedBox(
+                  height: 4,
+                )
               ],
             ),
           ),

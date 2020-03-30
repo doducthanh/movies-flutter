@@ -17,22 +17,24 @@ class _PlayingPageState extends State<PlayingPage> {
   ChewieController chewieController;
 
   @override
-  void initState() {
-    _videoController = VideoPlayerController.network(
-        'http://www.sample-videos.com/video123/mp4/720/big_buck_bunny_720p_20mb.mp4');
-    chewieController = ChewieController(
-      videoPlayerController: _videoController,
-      aspectRatio: 16 / 9,
-      autoPlay: true,
-      looping: true,
-    );
+  void initState()  {
     super.initState();
+    setState(() async {
+      _videoController = await VideoPlayerController.network(
+          'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4');
+      chewieController = ChewieController(
+        videoPlayerController: _videoController,
+        aspectRatio: 16 / 9,
+        autoPlay: true,
+        looping: true,
+      );
+    });
+
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(minHeight: 200, maxHeight: 400),
       child:
         Chewie(
           controller: chewieController,

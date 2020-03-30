@@ -8,4 +8,5 @@ class ImagePathConst {
 
   ///icon
   static const String icFavouriteRed = "assets/icons/ic_favourite_red.png";
+  static const String icSetting = "assets/icons/ic_setting.png";
 }
