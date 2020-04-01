@@ -82,13 +82,13 @@ class _SearchMoviePageState extends State<SearchMoviePage> {
               (listResult.length > 0)
                   ? Expanded(
                       child: Container(
-                          margin: EdgeInsets.all(16),
-                          //constraints: BoxConstraints(minHeight: 300),
+                          margin: EdgeInsets.only(top: 16, left: 16, right: 16),
+                          constraints: BoxConstraints(minHeight: 0),
                           child: ListView.separated(
                               shrinkWrap: true,
                               scrollDirection: Axis.vertical,
                               itemBuilder: (context, index) {
-                                var movie = listResult[index];
+                                var movie = listResult.elementAt(index) ?? Movie();
                                 return GestureDetector(
                                   onTap: (){
                                     Navigator.pushReplacement(context,

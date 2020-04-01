@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutterappmovie/model/account.dart';
 import 'package:flutterappmovie/model/actor.dart';
 import 'package:flutterappmovie/model/movie.dart';
+import 'package:flutterappmovie/model/news.dart';
 import 'dart:convert';
 
 import 'package:flutterappmovie/utility/app_utility.dart';
@@ -155,4 +156,13 @@ class FirebaseRepository {
     }
   }
 
+  ///lấy danh sách tin tức hiển thị
+  Future<List<News>> getListNews() async {
+    List<News> list = [];
+    QuerySnapshot result = await _database.collection("news").getDocuments();
+    result.documents.forEach((data) {
+      list.add(News.fromJson(data.data));
+    });
+    return list;
+  }
 }

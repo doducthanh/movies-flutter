@@ -8,6 +8,7 @@ import 'package:flutterappmovie/common/cache.dart';
 import 'package:flutterappmovie/screen/account_screen.dart';
 import 'package:flutterappmovie/screen/activity_screen.dart';
 import 'package:flutterappmovie/screen/login/login_screen.dart';
+import 'package:flutterappmovie/screen/news_screen.dart';
 import 'package:flutterappmovie/screen/videos_screen.dart';
 
 import '../common/base_bottom_bar_item.dart';
@@ -125,7 +126,7 @@ class MainPageState extends State<MainPage> {
             offstage: _currentSelected != 2,
             child: new TickerMode(
               enabled: _currentSelected == 2,
-              child:  ActivityPage(),
+              child:  NewsPage(),
             ),
           ),
           new Offstage(
