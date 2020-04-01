@@ -11,6 +11,8 @@ import 'package:flutterappmovie/model/actor.dart';
 import 'package:flutterappmovie/model/movie.dart';
 import 'package:flutterappmovie/module_example/dartboard_list_tutorial.dart';
 import 'package:flutterappmovie/screen/detail_movie_screen.dart';
+import 'package:flutterappmovie/screen/playing_screen.dart';
+import 'package:flutterappmovie/screen/search_movie_screen.dart';
 
 import '../common/colors_const.dart';
 import '../common/image_path_const.dart';
@@ -35,6 +37,8 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   ActorsBloc _actorsBloc = ActorsBloc();
 
   bool isFavourite = false;
+
+  List<Movie> _allMovie = [];
 
   @override
   void initState() {
@@ -193,7 +197,10 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             GestureDetector(
-                onTap: _showDialog,
+                onTap: (){
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SearchMoviePage(widget._allMovies)));
+                },
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
                   child: Container(
@@ -248,6 +255,10 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   ///ve button play tren poster phim
   Widget _buildPlayButtonWidget() {
     return FlatButton(
+      onPressed: (){
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => PlayingPage()));
+      },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 30),
         child: Container(

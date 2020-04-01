@@ -19,26 +19,55 @@ class _PlayingPageState extends State<PlayingPage> {
   @override
   void initState()  {
     super.initState();
-    setState(() async {
-      _videoController = await VideoPlayerController.network(
-          'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4');
-      chewieController = ChewieController(
-        videoPlayerController: _videoController,
-        aspectRatio: 16 / 9,
-        autoPlay: true,
-        looping: true,
-      );
-    });
-
+    _videoController = VideoPlayerController.network("http://clips.vorwaerts-gmbh.de/VfE_html5.mp4")
+      ..initialize().then((_) {
+        _videoController.play();
+      });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child:
-        Chewie(
-          controller: chewieController,
+    return GestureDetector(
+      onTap: (){
+        _videoController.pause();
+      },
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Column(
+          children: <Widget>[
+            _builIconClose(),
+            Expanded(
+              child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: VideoPlayer(_videoController)
+              ),
+            ),
+          ],
         ),
+      ),
+    );
+  }
+
+  Widget _builIconClose() {
+    return Align(
+      alignment: Alignment.topRight,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 30),
+        child: FlatButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Container(
+            width: 30,
+            height: 30,
+            decoration:
+            BoxDecoration(shape: BoxShape.circle, color: Colors.white70),
+            child: Icon(Icons.close),
+          ),
+        ),
+      ),
     );
   }
 }

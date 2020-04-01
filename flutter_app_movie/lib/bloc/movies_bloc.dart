@@ -13,6 +13,7 @@ class MoviesBloc {
   listMovies() async {
     List<Movie> allMovie = await _fireRepository.getListMovie();
     _moviesStream.sink.add(allMovie);
+    return allMovie;
   }
 
   addFavouriteMovie(Movie movie, String id) async {

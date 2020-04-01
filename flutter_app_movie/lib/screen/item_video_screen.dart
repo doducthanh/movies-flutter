@@ -33,6 +33,7 @@ class _ItemVideoState extends State<ItemVideo> {
               padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
               child: _buildHeaderWidget()),
           _buildContentVideoWidget(),
+          Container(color: Colors.grey, height: 1,),
           _buildBottomWidget(),
         ],
       ),
@@ -170,7 +171,7 @@ class _ItemVideoState extends State<ItemVideo> {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 50,
-      color: Colors.green,
+      color: Colors.white,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[

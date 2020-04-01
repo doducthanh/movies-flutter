@@ -10,6 +10,7 @@ import 'package:flutterappmovie/common/value_const.dart';
 import 'package:flutterappmovie/model/movie.dart';
 import 'package:flutterappmovie/screen/playing_screen.dart';
 import 'package:flutterappmovie/utility/app_utility.dart';
+import 'package:video_player/video_player.dart';
 import 'login/login_screen.dart';
 
 enum StateVideoPlay { notPlay, play, pause }
@@ -31,9 +32,13 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
   ScrollController _scrollController = ScrollController();
   var isFavourite = false;
 
+  VideoPlayerController _playerController;
+
   @override
   void initState() {
-    //_playVideo();
+    super.initState();
+    _playerController = VideoPlayerController.network("http://clips.vorwaerts-gmbh.de/VfE_html5.mp4")
+      ..initialize().then((_) {});
   }
 
   @override
@@ -198,9 +203,8 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
   Widget _buildButtonPlay() {
     return FlatButton(
       onPressed: () {
-        setState(() {
-          stateVideo = StateVideoPlay.play;
-        });
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => PlayingPage()));
       },
       child: Container(
         height: 40,
