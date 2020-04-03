@@ -53,16 +53,33 @@ class MainPageState extends State<MainPage> {
     });
   }
 
-  _actionLogout() async {
-    bool result = await widget._accountBloc.signout();
-    if (result) {
-      BotToast.showSimpleNotification(title: "Đăng xuất thành công");
-      setState(() {
-        widget.isLogin = false;
-        AppCaches.isLogin = false;
-        AppCaches.userId = null;
-      });
-    }
+  _actionLogout()  {
+    CupertinoAlertDialog(
+      title: Text("Bạn có muốn đăng xuất tài khoản không?"),
+      actions: <Widget>[
+        FlatButton(
+          onPressed: () async {
+            bool result = await widget._accountBloc.signout();
+            if (result) {
+              BotToast.showSimpleNotification(title: "Đăng xuất thành công");
+              setState(() {
+                widget.isLogin = false;
+                AppCaches.isLogin = false;
+                AppCaches.userId = null;
+              });
+            }
+          },
+          child: Text("Có"),
+        ),
+        FlatButton(
+          onPressed: (){
+            Navigator.of(context).pop();
+          },
+          child: Text("Không"),
+        )
+      ],
+    );
+
   }
 
   _showDialog(String text) {

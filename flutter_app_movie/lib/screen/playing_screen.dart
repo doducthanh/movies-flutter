@@ -1,4 +1,5 @@
 import 'package:chewie/chewie.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -16,58 +17,104 @@ class _PlayingPageState extends State<PlayingPage> {
 
   ChewieController chewieController;
 
+  double opacity = 0.0;
+
+  bool isPlaying = true;
+
   @override
-  void initState()  {
+  void initState() {
     super.initState();
-    _videoController = VideoPlayerController.network("http://clips.vorwaerts-gmbh.de/VfE_html5.mp4")
-      ..initialize().then((_) {
-        _videoController.play();
-      });
+    _videoController = VideoPlayerController.network(
+        "http://clips.vorwaerts-gmbh.de/VfE_html5.mp4");
+
+    _videoController.addListener(() {
+      setState(() {});
+    });
+    _videoController.setLooping(true);
+    _videoController.initialize().then((_) => setState(() {}));
+    _videoController.play();
+
+
+//    _videoController = VideoPlayerController.network(
+//        "http://clips.vorwaerts-gmbh.de/VfE_html5.mp4")
+//      ..initialize().then((_) {
+//        _videoController.play();
+//      });
+
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
+
         _videoController.pause();
+
+        setState(() {
+          opacity = 1.0;
+          Future.delayed(Duration(seconds: 3)).then((value){
+            setState(() {
+              opacity = 0.0;
+            });
+          });
+        });
       },
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: Column(
-          children: <Widget>[
-            _builIconClose(),
-            Expanded(
-              child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  child: VideoPlayer(_videoController)
+      child: Scaffold(
+        body: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Stack(
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                    child: VideoPlayer(_videoController)),
               ),
-            ),
-          ],
+              Opacity(
+                opacity: opacity,
+                child: PlayAndPause(_videoController),
+              )
+            ],
+          ),
         ),
       ),
     );
   }
+}
 
-  Widget _builIconClose() {
-    return Align(
-      alignment: Alignment.topRight,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 30),
-        child: FlatButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Container(
-            width: 30,
-            height: 30,
-            decoration:
-            BoxDecoration(shape: BoxShape.circle, color: Colors.white70),
-            child: Icon(Icons.close),
+class PlayAndPause extends StatelessWidget {
+
+  VideoPlayerController _controller;
+
+
+  PlayAndPause(this._controller);
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Stack(
+      children: <Widget>[
+        AnimatedSwitcher(
+          duration: Duration(milliseconds: 50),
+          reverseDuration: Duration(milliseconds: 200),
+          child: _controller.value.isPlaying
+              ? SizedBox.shrink()
+              : Container(
+            color: Colors.black26,
+            child: Center(
+              child: Icon(
+                Icons.play_arrow,
+                color: Colors.white,
+                size: 100.0,
+              ),
+            ),
           ),
         ),
-      ),
+        GestureDetector(
+          onTap: () {
+            _controller.value.isPlaying ? _controller.pause() : _controller.play();
+          },
+        ),
+      ],
     );
   }
 }
