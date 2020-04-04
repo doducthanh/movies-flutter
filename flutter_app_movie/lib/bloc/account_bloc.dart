@@ -16,6 +16,9 @@ class AccountBloc {
   BehaviorSubject<String> _passwordObject = BehaviorSubject<String>();
   get getPasswordStream => _passwordObject.stream;
 
+  BehaviorSubject<Account> _accountObject = BehaviorSubject<Account>();
+  get getAccountStream => _accountObject.stream;
+
   var _firebaseReposity = FirebaseRepository();
 
   bool validateUserName(String username) {
@@ -95,7 +98,10 @@ class AccountBloc {
     validatePassword(password);
     if (validateEmail(email) && validatePassword(password)) {
       result = await _firebaseReposity.signIn(email, password);
-      if (result != null) { AppCaches.userId = result;}
+      if (result != null) {
+        AppCaches.userId = result;
+        AppCaches.setCacheUserId(result);
+      }
       return !(result == null);
     } else {
       return false;
@@ -105,6 +111,16 @@ class AccountBloc {
   Future<Account> getAccount(String userId) async {
     Account account = await _firebaseReposity.getCurrentUser(userId);
     return account;
+  }
+
+  Future<Account> getAccountCache() async {
+    String id = await AppCaches.getCacheUserId();
+    if (!AppUtility.stringNullOrEmpty(id)) {
+      Account account = await getAccount(id);
+      _accountObject.sink.add(account);
+    } else {
+      _accountObject.sink.add(null);
+    }
   }
 
   Future<bool> signout() async {

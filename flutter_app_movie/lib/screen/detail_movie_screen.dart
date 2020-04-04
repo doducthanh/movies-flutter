@@ -37,8 +37,17 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
   @override
   void initState() {
     super.initState();
-    _playerController = VideoPlayerController.network("http://clips.vorwaerts-gmbh.de/VfE_html5.mp4")
+    _playerController = VideoPlayerController.network(
+        "http://clips.vorwaerts-gmbh.de/VfE_html5.mp4")
       ..initialize().then((_) {});
+    if (AppCaches.currentAccount != null) {
+      AppCaches.currentAccount.listFavouriteMovie.forEach((element) {
+        if (element.id == widget.movie.id) {
+          isFavourite = true;
+        }
+      });
+      setState(() {});
+    }
   }
 
   @override
@@ -203,8 +212,8 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
   Widget _buildButtonPlay() {
     return FlatButton(
       onPressed: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => PlayingPage()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => PlayingPage()));
       },
       child: Container(
         height: 40,
@@ -308,7 +317,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
                   height: 36,
                   decoration:
                       BoxDecoration(shape: BoxShape.circle, color: Colors.grey),
-                  child: (AppUtility.isLogin())
+                  child: isFavourite
                       ? Padding(
                           padding: const EdgeInsets.all(3.0),
                           child: Image.asset(
@@ -401,12 +410,14 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
                   .copyWith(color: Colors.white, fontSize: 20),
             ),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Container(
               height: 430,
               width: double.infinity,
               child: GridView.count(
-                childAspectRatio: 3/2,
+                childAspectRatio: 3 / 2,
                 shrinkWrap: true,
                 //physics: const NeverScrollableScrollPhysics(),
                 crossAxisCount: 2,
@@ -416,12 +427,21 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
                 scrollDirection: Axis.horizontal,
                 children: listMovie.map((movie) {
                   return GestureDetector(
-                    onTap: (){
-                      _scrollController.animateTo(0, duration: Duration(milliseconds: 500), curve: Curves.ease);
+                    onTap: () {
+                      _scrollController.animateTo(0,
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.ease);
+                      isFavourite = false;
+                      if (AppCaches.currentAccount != null) {
+                        AppCaches.currentAccount.listFavouriteMovie.forEach((element) {
+                          if (element.id == movie.id) {
+                            isFavourite = true;
+                          }
+                        });
+                      }
                       setState(() {
                         widget.movie = movie;
                       });
-
                     },
                     child: Column(
                       children: <Widget>[
@@ -430,7 +450,9 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
                           height: 180,
                           fit: BoxFit.fitHeight,
                         ),
-                        SizedBox(height: 10,),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Text(
                           movie.name,
                           style: Theme.of(context)
