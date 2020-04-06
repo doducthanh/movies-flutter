@@ -134,7 +134,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
             padding: const EdgeInsets.only(left: 16, right: 16),
             child: Container(
               color: Colors.grey,
-              height: 1,
+              height: 0.5,
             ),
           )
         ],
@@ -153,9 +153,12 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
           child: Container(
             width: 30,
             height: 30,
+            padding: EdgeInsets.all(5.0),
             decoration: BoxDecoration(
                 shape: BoxShape.circle, color: ColorsConst.mainColor),
-            child: Icon(Icons.close),
+            child: Image.asset(
+              ImagePathConst.icCloseWhite,
+            ),
           ),
         ),
       ),
@@ -224,7 +227,8 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(Icons.play_arrow),
+            Image.asset(ImagePathConst.icPlayWhite, width: 24, height: 24,),
+            SizedBox(width: 4,),
             Text('Phát',
                 style: Theme.of(context)
                     .textTheme
@@ -354,7 +358,12 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
                             ImagePathConst.icFavouriteRed,
                           ),
                         )
-                      : Icon(Icons.favorite),
+                      : Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Image.asset(
+                            ImagePathConst.icFavouriteGray,
+                          ),
+                        ),
                 ),
                 Container(
                   padding: EdgeInsets.only(top: 4),
@@ -378,7 +387,12 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
                   height: 36,
                   decoration:
                       BoxDecoration(shape: BoxShape.circle, color: Colors.grey),
-                  child: Icon(Icons.message),
+                  child: Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Image.asset(
+                      ImagePathConst.icCommentGray,
+                    ),
+                  ),
                 ),
                 Container(
                   padding: EdgeInsets.only(top: 4),
@@ -402,7 +416,12 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
                   height: 36,
                   decoration:
                       BoxDecoration(shape: BoxShape.circle, color: Colors.grey),
-                  child: Icon(Icons.share),
+                  child: Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Image.asset(
+                      ImagePathConst.icShareGray,
+                    ),
+                  ),
                 ),
                 Container(
                   padding: EdgeInsets.only(top: 4),
@@ -434,10 +453,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
             alignment: Alignment.topLeft,
             child: Text(
               "Tương tự",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText1
-                  .copyWith(color: Colors.white, fontSize: 20),
+              style: TextStyle(decoration: TextDecoration.underline, fontSize: 20, color: Colors.white),
             ),
           ),
           SizedBox(

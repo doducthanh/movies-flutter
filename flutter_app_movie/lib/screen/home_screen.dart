@@ -23,7 +23,6 @@ class HomePage extends StatefulWidget {
 
   int indexPageIndicator = 0;
 
-
   Account account;
 
   HomePage({this.account});
@@ -161,7 +160,9 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
                 onPageChanged: (index) {
                   Movie movie = listMovie[index];
                   setState(() {
-                    if ((AppCaches.currentAccount != null) && (AppCaches.currentAccount.listFavouriteMovie.contains(movie))) {
+                    if ((AppCaches.currentAccount != null) &&
+                        (AppCaches.currentAccount.listFavouriteMovie
+                            .contains(movie))) {
                       isFavourite = true;
                     } else {
                       isFavourite = false;
@@ -205,19 +206,25 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             GestureDetector(
-                onTap: (){
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => SearchMoviePage(widget._allMovies)));
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              SearchMoviePage(widget._allMovies)));
                 },
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
                   child: Container(
                     padding: EdgeInsets.all(6),
                     decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: Colors.white70),
+                        shape: BoxShape.circle, color: ColorsConst.mainColor),
                     child: Center(
-                      child: Icon(Icons.search),
-                    ),
+                        child: Image.asset(
+                      ImagePathConst.icSearchGray,
+                      width: 24,
+                      height: 24,
+                    )),
                   ),
                 )),
             GestureDetector(
@@ -229,17 +236,20 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
                 child: Container(
-                  padding: EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: Colors.white70),
-                  child: (isFavourite)
-                      ? Image.asset(
-                          ImagePathConst.icFavouriteRed,
-                          width: 26,
-                          height: 26,
-                        )
-                      : Icon(Icons.favorite),
-                ),
+                    padding: EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: ColorsConst.mainColor),
+                    child: (isFavourite)
+                        ? Image.asset(
+                            ImagePathConst.icFavouriteRed,
+                            width: 24,
+                            height: 24,
+                          )
+                        : Image.asset(
+                            ImagePathConst.icFavouriteGray,
+                            width: 24,
+                            height: 24,
+                          )),
               ),
             ),
             RaisedButton(
@@ -263,9 +273,9 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   ///ve button play tren poster phim
   Widget _buildPlayButtonWidget() {
     return FlatButton(
-      onPressed: (){
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => PlayingPage()));
+      onPressed: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => PlayingPage()));
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 30),
@@ -280,7 +290,11 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Icon(Icons.play_arrow),
+                Image.asset(
+                  ImagePathConst.icPlayWhite,
+                  width: 28,
+                  height: 28,
+                ),
                 SizedBox(
                   width: 4,
                 ),
@@ -337,10 +351,9 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   ///ve templet cho 1 sp
   Widget _buildProductSunshine(String overview, String imgPath) {
     return GestureDetector(
-      onTap: (){
-        Navigator.push(context,
-          MaterialPageRoute(builder: (context) => DardBoardPage())
-        );
+      onTap: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => DardBoardPage()));
       },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(0, 10, 6, 10),

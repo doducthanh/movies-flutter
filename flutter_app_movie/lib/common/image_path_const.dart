@@ -9,4 +9,10 @@ class ImagePathConst {
   ///icon
   static const String icFavouriteRed = "assets/icons/ic_favourite_red.png";
   static const String icSetting = "assets/icons/ic_setting.png";
+  static const String icCloseWhite = "assets/icons/ic_close_white.png";
+  static const String icFavouriteGray= "assets/icons/ic_favourite_gray.png";
+  static const String icCommentGray = "assets/icons/ic_comment_gray.png";
+  static const String icPlayWhite = "assets/icons/ic_play_white.png";
+  static const String icShareGray = "assets/icons/ic_share_gray.png";
+  static const String icSearchGray = "assets/icons/ic_search_gray.png";
 }

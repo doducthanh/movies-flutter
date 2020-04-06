@@ -120,22 +120,7 @@ class PlayAndPause extends StatelessWidget {
                         ),
                       ),
                     ),
-
-//                    GestureDetector(
-//                      onTap: () {
-//                        Navigator.of(context).pop();
-//                      },
-//                      child: SafeArea(
-//                        child: Align(
-//                          alignment: Alignment.topRight,
-//                          child: Container(
-//                            width: 30,
-//                            height: 30,
-//                            child: Icon(Icons.close),
-//                          ),
-//                        ),
-//                      ),
-//                    ),
+                    
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: Container(
@@ -160,42 +145,46 @@ class PlayAndPause extends StatelessWidget {
                                   }
                                   return Column(
                                     children: <Widget>[
-                                      Slider(
-                                        min: 0.0,
-                                        max: _controller
-                                            .value.duration.inSeconds
-                                            .toDouble(),
-                                        inactiveColor: Colors.white,
-                                        activeColor: Colors.blueAccent,
-                                        value:
-                                            snapshot.data.inSeconds.toDouble(),
-                                        onChanged: (newValue) {
-                                          seekTo = Duration(
-                                              seconds: newValue.toInt());
-                                          _behaviorSubject.sink.add(Duration(
-                                              seconds: newValue.toInt()));
-                                        },
+                                      Expanded(
+                                        child: Slider(
+                                          min: 0.0,
+                                          max: _controller
+                                              .value.duration.inSeconds
+                                              .toDouble(),
+                                          inactiveColor: Colors.white,
+                                          activeColor: Colors.blueAccent,
+                                          value:
+                                              snapshot.data.inSeconds.toDouble(),
+                                          onChanged: (newValue) {
+                                            seekTo = Duration(
+                                                seconds: newValue.toInt());
+                                            _behaviorSubject.sink.add(Duration(
+                                                seconds: newValue.toInt()));
+                                          },
+                                        ),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            16, 0, 16, 10),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Text(
-                                              AppUtility.formatDurationSring(
-                                                  snapshot.data),
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                            Text(
-                                              AppUtility.formatDurationSring(
-                                                  _controller.value.duration),
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            )
-                                          ],
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              16, 0, 16, 10),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: <Widget>[
+                                              Text(
+                                                AppUtility.formatDurationSring(
+                                                    snapshot.data),
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                              Text(
+                                                AppUtility.formatDurationSring(
+                                                    _controller.value.duration),
+                                                style: TextStyle(
+                                                    color: Colors.white),
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       )
                                     ],
