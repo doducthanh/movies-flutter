@@ -33,4 +33,17 @@ class AppUtility {
       return false;
     }
   }
+
+  static String formatDurationSring(Duration duration) {
+    int valueSeconds = duration.inSeconds;
+    int hours = valueSeconds ~/ 3600;
+    int minute = (valueSeconds - hours*3600) ~/ 60;
+    int second = valueSeconds - hours*3600 - minute*60;
+    return AppUtility.formatNumberString(hours) + ":" + AppUtility.formatNumberString(minute)
+        + ":" + AppUtility.formatNumberString(second);
+  }
+
+  static String formatNumberString(int number) {
+    return (number < 10) ? ("0" + number.toString()) : number.toString();
+  }
 }
