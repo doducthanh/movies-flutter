@@ -40,15 +40,20 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
     _playerController = VideoPlayerController.network(
         "http://clips.vorwaerts-gmbh.de/VfE_html5.mp4")
       ..initialize().then((_) {});
+    if (AppCaches.currentAccount != null) {
+      AppCaches.currentAccount.listFavouriteMovie.forEach((element) {
+        if (element.id == widget.movie.id) {
+          isFavourite = true;
+        }
+      });
+      setState(() {});
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorsConst.mainColor,
-      body: _buildBodyWidget()
-    );
-
+        backgroundColor: ColorsConst.mainColor, body: _buildBodyWidget());
   }
 
   Widget _buildBodyWidget() {
@@ -119,7 +124,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
                   ),
                 ],
               )),
-          (AppCaches.isLogin) ? _buildProgessBar() :  SizedBox(height: 0),
+          (AppCaches.isLogin) ? _buildProgessBar() : SizedBox(height: 0),
           _buildOverviewMovie(),
           _buildFavouriteWidget(),
           SizedBox(
@@ -233,7 +238,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
 
   Widget _buildProgessBar() {
     Movie movie;
-    AppCaches.account.listFavouriteMovie.forEach((element) {
+    AppCaches.currentAccount.listFavouriteMovie.forEach((element) {
       if (element.id == widget.movie.id) {
         movie = element;
       }
@@ -257,7 +262,10 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
             ),
             Padding(
               padding: const EdgeInsets.only(right: 16),
-              child: Text('Con ${(movie.duration - movie.watching).toString()} phut', style: TextStyle(color: Colors.white, fontSize: 10),),
+              child: Text(
+                'Con ${(movie.duration - movie.watching).toString()} phut',
+                style: TextStyle(color: Colors.white, fontSize: 10),
+              ),
             )
           ],
         ),
@@ -310,8 +318,10 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
 
   Widget _buildFavouriteWidget() {
     isFavourite = false;
-    AppCaches.account.listFavouriteMovie.forEach((element) {
-      if (element.id == widget.movie.id) { isFavourite = true; }
+    AppCaches.currentAccount.listFavouriteMovie.forEach((element) {
+      if (element.id == widget.movie.id) {
+        isFavourite = true;
+      }
     });
     return Center(
       child: Row(
@@ -337,7 +347,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
                   height: 36,
                   decoration:
                       BoxDecoration(shape: BoxShape.circle, color: Colors.grey),
-                  child: (isFavourite)
+                  child: isFavourite
                       ? Padding(
                           padding: const EdgeInsets.all(3.0),
                           child: Image.asset(
@@ -451,6 +461,17 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
                       _scrollController.animateTo(0,
                           duration: Duration(milliseconds: 500),
                           curve: Curves.ease);
+
+                      isFavourite = false;
+                      if (AppCaches.currentAccount != null) {
+                        AppCaches.currentAccount.listFavouriteMovie
+                            .forEach((element) {
+                          if (element.id == movie.id) {
+                            isFavourite = true;
+                          }
+                        });
+                      }
+
                       setState(() {
                         widget.movie = movie;
                       });

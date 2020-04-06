@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterappmovie/bloc/actors_bloc.dart';
 import 'package:flutterappmovie/bloc/movies_bloc.dart';
+import 'package:flutterappmovie/common/cache.dart';
 import 'package:flutterappmovie/common/value_const.dart';
 import 'package:flutterappmovie/model/account.dart';
 import 'package:flutterappmovie/model/actor.dart';
@@ -21,6 +22,7 @@ class HomePage extends StatefulWidget {
   List<Movie> _allMovies = [];
 
   int indexPageIndicator = 0;
+
 
   Account account;
 
@@ -157,7 +159,13 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
                 aspectRatio: 2.0,
                 autoPlayInterval: Duration(seconds: 5),
                 onPageChanged: (index) {
+                  Movie movie = listMovie[index];
                   setState(() {
+                    if ((AppCaches.currentAccount != null) && (AppCaches.currentAccount.listFavouriteMovie.contains(movie))) {
+                      isFavourite = true;
+                    } else {
+                      isFavourite = false;
+                    }
                     widget.indexPageIndicator = index;
                   });
                 },

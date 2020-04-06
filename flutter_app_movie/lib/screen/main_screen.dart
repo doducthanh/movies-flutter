@@ -1,10 +1,10 @@
-
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterappmovie/bloc/account_bloc.dart';
 import 'package:flutterappmovie/common/app_const.dart';
 import 'package:flutterappmovie/common/cache.dart';
+import 'package:flutterappmovie/model/account.dart';
 import 'package:flutterappmovie/screen/account_screen.dart';
 import 'package:flutterappmovie/screen/activity_screen.dart';
 import 'package:flutterappmovie/screen/login/login_screen.dart';
@@ -16,7 +16,6 @@ import '../common/colors_const.dart';
 import 'home_screen.dart';
 
 class MainPage extends StatefulWidget {
-
   @override
   State<StatefulWidget> createState() {
     return MainPageState();
@@ -28,13 +27,15 @@ class MainPage extends StatefulWidget {
 }
 
 class MainPageState extends State<MainPage> {
-
   var _listBottomBar = [
     MovieBottomBarItem.init(AppConst.homeBarTitle, Icon(Icons.home)),
     MovieBottomBarItem.init(AppConst.videoBarTitle, Icon(Icons.video_library)),
-    MovieBottomBarItem.init(AppConst.activityBarTitle, Icon(Icons.notifications_active)),
-    MovieBottomBarItem.init(AppConst.contactBarTitle, Icon(Icons.perm_contact_calendar)),
-    MovieBottomBarItem.init(AppConst.accountBarTitle, Icon(Icons.account_circle)),
+    MovieBottomBarItem.init(
+        AppConst.activityBarTitle, Icon(Icons.notifications_active)),
+    MovieBottomBarItem.init(
+        AppConst.contactBarTitle, Icon(Icons.perm_contact_calendar)),
+    MovieBottomBarItem.init(
+        AppConst.accountBarTitle, Icon(Icons.account_circle)),
   ];
 
   int _currentSelected = 0;
@@ -47,39 +48,44 @@ class MainPageState extends State<MainPage> {
 
   _actionAfterLogin() async {
     BotToast.showSimpleNotification(title: "Đăng nhập thành công");
+    widget._accountBloc.getAccountCache();
     setState(() {
       widget.isLogin = true;
       AppCaches.isLogin = true;
     });
   }
 
-  _actionLogout()  {
-    CupertinoAlertDialog(
-      title: Text("Bạn có muốn đăng xuất tài khoản không?"),
-      actions: <Widget>[
-        FlatButton(
-          onPressed: () async {
-            bool result = await widget._accountBloc.signout();
-            if (result) {
-              BotToast.showSimpleNotification(title: "Đăng xuất thành công");
-              setState(() {
-                widget.isLogin = false;
-                AppCaches.isLogin = false;
-                AppCaches.userId = null;
-              });
-            }
-          },
-          child: Text("Có"),
-        ),
-        FlatButton(
-          onPressed: (){
-            Navigator.of(context).pop();
-          },
-          child: Text("Không"),
-        )
-      ],
-    );
-
+  _actionLogout() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: Text("Bạn có muốn đăng xuất tài khoản không?"),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () async {
+                  bool result = await widget._accountBloc.signout();
+                  if (result) {
+                    BotToast.showSimpleNotification(
+                        title: "Đăng xuất thành công");
+                    setState(() {
+                      widget.isLogin = false;
+                      AppCaches.isLogin = false;
+                      AppCaches.logout();
+                    });
+                  }
+                },
+                child: Text("Có"),
+              ),
+              FlatButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text("Không"),
+              )
+            ],
+          );
+        });
   }
 
   _showDialog(String text) {
@@ -93,16 +99,11 @@ class MainPageState extends State<MainPage> {
     ));
   }
 
-  _getAccount() async {
-    if(AppCaches.userId != null) {
-      AppCaches.account = await widget._accountBloc.getAccount(AppCaches.userId);
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    _getAccount();
+    widget._accountBloc.getAccountCache();
+
   }
 
   @override
@@ -114,21 +115,39 @@ class MainPageState extends State<MainPage> {
           backgroundColor: ColorsConst.mainColor,
           unselectedItemColor: Colors.white,
           selectedItemColor: Colors.yellow,
-          onTap: _selectedBottomBar, // new
-          currentIndex: _currentSelected, // new
-          items: _listBottomBar
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Container(
-          child: widget.isLogin ? Icon(Icons.arrow_forward) :Icon(Icons.perm_identity),
-        ),
-        onPressed: (){
-          AppCaches.isLogin ? _actionLogout() :
-          Navigator.push(
-              context,
-              CupertinoPageRoute(builder: (context) => LoginPage(loginCallback: _actionAfterLogin))
+          onTap: _selectedBottomBar,
+          // new
+          currentIndex: _currentSelected,
+          // new
+          items: _listBottomBar),
+      floatingActionButton: StreamBuilder<Account>(
+        stream: widget._accountBloc.getAccountStream,
+        builder: (context, snapshot) {
+          var isLogin = false;
+          if ((!snapshot.hasData) || (snapshot.data == null)) {
+            isLogin = false;
+          } else {
+            isLogin = true;
+            AppCaches.currentAccount = snapshot.data;
+            BotToast.showSimpleNotification(title: "Xin chào ${snapshot.data.username}");
+          }
+          return FloatingActionButton(
+            child: Container(
+              child: isLogin
+                  ? Icon(Icons.arrow_forward)
+                  : Icon(Icons.perm_identity),
+            ),
+            onPressed: () {
+              isLogin
+                  ? _actionLogout()
+                  : Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                          builder: (context) =>
+                              LoginPage(loginCallback: _actionAfterLogin)));
+            },
           );
-        },
+        }
       ),
       body: Stack(
         children: <Widget>[
@@ -136,35 +155,35 @@ class MainPageState extends State<MainPage> {
             offstage: _currentSelected != 0,
             child: new TickerMode(
               enabled: _currentSelected == 0,
-              child:new HomePage(),
+              child: new HomePage(),
             ),
           ),
           new Offstage(
             offstage: _currentSelected != 1,
             child: new TickerMode(
               enabled: _currentSelected == 1,
-              child:  new VideoPage(),
+              child: new VideoPage(),
             ),
           ),
           new Offstage(
             offstage: _currentSelected != 2,
             child: new TickerMode(
               enabled: _currentSelected == 2,
-              child:  NewsPage(),
+              child: NewsPage(),
             ),
           ),
           new Offstage(
             offstage: _currentSelected != 3,
             child: new TickerMode(
               enabled: _currentSelected == 3,
-              child:  new Text('3'),
+              child: new Text('3'),
             ),
           ),
           new Offstage(
             offstage: _currentSelected != 4,
             child: new TickerMode(
               enabled: _currentSelected == 4,
-              child:  AccountPage(),
+              child: AccountPage(),
             ),
           ),
         ],
