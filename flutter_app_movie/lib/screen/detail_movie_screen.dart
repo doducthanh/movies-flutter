@@ -37,13 +37,18 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
   @override
   void initState() {
     super.initState();
-    _playerController = VideoPlayerController.network("http://clips.vorwaerts-gmbh.de/VfE_html5.mp4")
+    _playerController = VideoPlayerController.network(
+        "http://clips.vorwaerts-gmbh.de/VfE_html5.mp4")
       ..initialize().then((_) {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return _buildBodyWidget();
+    return Scaffold(
+      backgroundColor: ColorsConst.mainColor,
+      body: _buildBodyWidget()
+    );
+
   }
 
   Widget _buildBodyWidget() {
@@ -56,7 +61,6 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
         child: Column(
           children: <Widget>[
             _buildHeaderWidget(),
-            //_buildDecriptionWidget(),
             _buildGridMoive(widget.listMovie),
           ],
         ),
@@ -115,7 +119,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
                   ),
                 ],
               )),
-          //_buildProgessBar()
+          (AppCaches.isLogin) ? _buildProgessBar() :  SizedBox(height: 0),
           _buildOverviewMovie(),
           _buildFavouriteWidget(),
           SizedBox(
@@ -144,8 +148,8 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
           child: Container(
             width: 30,
             height: 30,
-            decoration:
-                BoxDecoration(shape: BoxShape.circle, color: Colors.white70),
+            decoration: BoxDecoration(
+                shape: BoxShape.circle, color: ColorsConst.mainColor),
             child: Icon(Icons.close),
           ),
         ),
@@ -203,8 +207,8 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
   Widget _buildButtonPlay() {
     return FlatButton(
       onPressed: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => PlayingPage()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => PlayingPage()));
       },
       child: Container(
         height: 40,
@@ -227,18 +231,39 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
     );
   }
 
-//  Widget _buildProgessBar() {
-//    return Row(
-//      children: <Widget>[
-//        LinearProgressIndicator(
-//          backgroundColor: Colors.green,
-//          value: 20,
-//          valueColor:
-//        ),
-//        Text('Con 40 phut')
-//      ],
-//    );
-//  }
+  Widget _buildProgessBar() {
+    Movie movie;
+    AppCaches.account.listFavouriteMovie.forEach((element) {
+      if (element.id == widget.movie.id) {
+        movie = element;
+      }
+    });
+    movie = (movie == null) ? widget.movie : movie;
+    var isHidden = (movie.watching > 0) ? false : true;
+    return Visibility(
+      visible: !isHidden,
+      child: Container(
+        height: 40,
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: CupertinoSlider(
+                min: 0,
+                max: widget.movie.duration.toDouble(),
+                activeColor: Colors.orange,
+                thumbColor: Colors.transparent,
+                value: movie.watching.toDouble(),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: Text('Con ${(movie.duration - movie.watching).toString()} phut', style: TextStyle(color: Colors.white, fontSize: 10),),
+            )
+          ],
+        ),
+      ),
+    );
+  }
 
   Widget _buildOverviewMovie() {
     return Padding(
@@ -284,6 +309,10 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
   }
 
   Widget _buildFavouriteWidget() {
+    isFavourite = false;
+    AppCaches.account.listFavouriteMovie.forEach((element) {
+      if (element.id == widget.movie.id) { isFavourite = true; }
+    });
     return Center(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -308,7 +337,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
                   height: 36,
                   decoration:
                       BoxDecoration(shape: BoxShape.circle, color: Colors.grey),
-                  child: (AppUtility.isLogin())
+                  child: (isFavourite)
                       ? Padding(
                           padding: const EdgeInsets.all(3.0),
                           child: Image.asset(
@@ -401,12 +430,14 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
                   .copyWith(color: Colors.white, fontSize: 20),
             ),
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Container(
               height: 430,
               width: double.infinity,
               child: GridView.count(
-                childAspectRatio: 3/2,
+                childAspectRatio: 3 / 2,
                 shrinkWrap: true,
                 //physics: const NeverScrollableScrollPhysics(),
                 crossAxisCount: 2,
@@ -416,12 +447,13 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
                 scrollDirection: Axis.horizontal,
                 children: listMovie.map((movie) {
                   return GestureDetector(
-                    onTap: (){
-                      _scrollController.animateTo(0, duration: Duration(milliseconds: 500), curve: Curves.ease);
+                    onTap: () {
+                      _scrollController.animateTo(0,
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.ease);
                       setState(() {
                         widget.movie = movie;
                       });
-
                     },
                     child: Column(
                       children: <Widget>[
@@ -430,7 +462,9 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
                           height: 180,
                           fit: BoxFit.fitHeight,
                         ),
-                        SizedBox(height: 10,),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Text(
                           movie.name,
                           style: Theme.of(context)

@@ -28,6 +28,7 @@ class _PlayingPageState extends State<PlayingPage> {
         "http://clips.vorwaerts-gmbh.de/VfE_html5.mp4");
 
     _videoController.addListener(() {
+      print(_videoController.value.duration);
       setState(() {});
     });
     _videoController.setLooping(true);
@@ -61,13 +62,14 @@ class _PlayingPageState extends State<PlayingPage> {
       },
       child: Scaffold(
         body: Container(
+          color: Colors.black,
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           child: Stack(
             children: <Widget>[
               Expanded(
                 child: Container(
-                    child: VideoPlayer(_videoController)),
+                    child: Center(child: VideoPlayer(_videoController))),
               ),
               Opacity(
                 opacity: opacity,
@@ -84,7 +86,6 @@ class _PlayingPageState extends State<PlayingPage> {
 class PlayAndPause extends StatelessWidget {
 
   VideoPlayerController _controller;
-
 
   PlayAndPause(this._controller);
 

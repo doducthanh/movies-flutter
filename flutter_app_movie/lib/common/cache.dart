@@ -5,4 +5,5 @@ class AppCaches {
   static List<Movie> listMoview = [];
   static bool isLogin = false;
   static String userId = "";
+  static Account account;
 }

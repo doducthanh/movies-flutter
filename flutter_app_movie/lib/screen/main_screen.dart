@@ -93,9 +93,16 @@ class MainPageState extends State<MainPage> {
     ));
   }
 
+  _getAccount() async {
+    if(AppCaches.userId != null) {
+      AppCaches.account = await widget._accountBloc.getAccount(AppCaches.userId);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    _getAccount();
   }
 
   @override

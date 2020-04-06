@@ -158,6 +158,7 @@ class _LoginPageState extends State<LoginPage> {
           if (result) {
             print("ddthanh: dang nhap thanh cong");
             ProgressHUD.of(context).dismiss();
+            AppCaches.account = await _accountBloc.getAccount(AppCaches.userId);
             AppCaches.isLogin = true;
             if (widget.loginCallback != null) {
               widget.loginCallback();
