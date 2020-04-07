@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi';
 
 import 'package:flutterappmovie/model/account.dart';
@@ -22,9 +23,25 @@ class AppCaches {
     return preferences.getString("UserId");
   }
 
+  static cacheAccount(Account account) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var string = jsonEncode(account);
+    preferences.setString("account", string);
+  }
+
+  static Future<Account> getAccount() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var string = preferences.getString("account");
+    Map<String, dynamic> map = jsonDecode(string);
+    var account = Account.fromJson(map);
+    return account;
+  }
+
   static logout() async {
     AppCaches.setCacheUserId(null);
     AppCaches.currentAccount = null;
+    AppCaches.isLogin = false;
+    AppCaches.userId = null;
   }
 
 }

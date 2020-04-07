@@ -55,7 +55,7 @@ class MainPageState extends State<MainPage> {
     });
   }
 
-  _actionLogout() {
+  _actionLogout() async {
     showDialog(
         context: context,
         builder: (context) {
@@ -64,16 +64,12 @@ class MainPageState extends State<MainPage> {
             actions: <Widget>[
               FlatButton(
                 onPressed: () async {
-                  bool result = await widget._accountBloc.signout();
-                  if (result) {
-                    BotToast.showSimpleNotification(
-                        title: "Đăng xuất thành công");
-                    setState(() {
-                      widget.isLogin = false;
-                      AppCaches.isLogin = false;
-                      AppCaches.logout();
-                    });
-                  }
+                  await widget._accountBloc.signout();
+                  Navigator.of(context).pop();
+                  BotToast.showSimpleNotification(
+                      title: "Đăng xuất thành công");
+                  AppCaches.logout();
+                  widget._accountBloc.getAccountCache();
                 },
                 child: Text("Có"),
               ),
@@ -103,7 +99,6 @@ class MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     widget._accountBloc.getAccountCache();
-
   }
 
   @override
@@ -128,8 +123,8 @@ class MainPageState extends State<MainPage> {
             isLogin = false;
           } else {
             isLogin = true;
-            AppCaches.currentAccount = snapshot.data;
-            BotToast.showSimpleNotification(title: "Xin chào ${snapshot.data.username}");
+            //AppCaches.currentAccount = snapshot.data;
+            //BotToast.showSimpleNotification(title: "Xin chào ${snapshot.data.username}");
           }
           return FloatingActionButton(
             child: Container(

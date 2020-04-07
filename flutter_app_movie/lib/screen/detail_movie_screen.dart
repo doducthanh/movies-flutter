@@ -34,13 +34,36 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
 
   VideoPlayerController _playerController;
 
+  void actionFavourite() {
+    if (AppCaches.isLogin) {
+      var movieExist = false;
+      AppCaches.currentAccount.listFavouriteMovie.forEach((element) {
+        if (element.id == widget.movie.id) {
+          movieExist = true;
+        }
+      });
+      setState(() {
+        if (!movieExist) {
+          AppCaches.currentAccount.listFavouriteMovie.add(widget.movie);
+          isFavourite = true;
+        } else {
+          AppCaches.currentAccount.listFavouriteMovie.remove(widget.movie);
+          isFavourite = false;
+        }
+      });
+    } else {
+      _showDialogFavouriteMovie();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _playerController = VideoPlayerController.network(
         "http://clips.vorwaerts-gmbh.de/VfE_html5.mp4")
       ..initialize().then((_) {});
-    if (AppCaches.currentAccount != null) {
+    if ((AppCaches.currentAccount != null) &&
+        (AppCaches.currentAccount.listFavouriteMovie.length > 0)) {
       AppCaches.currentAccount.listFavouriteMovie.forEach((element) {
         if (element.id == widget.movie.id) {
           isFavourite = true;
@@ -227,8 +250,14 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.asset(ImagePathConst.icPlayWhite, width: 24, height: 24,),
-            SizedBox(width: 4,),
+            Image.asset(
+              ImagePathConst.icPlayWhite,
+              width: 24,
+              height: 24,
+            ),
+            SizedBox(
+              width: 4,
+            ),
             Text('Phát',
                 style: Theme.of(context)
                     .textTheme
@@ -322,28 +351,34 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
 
   Widget _buildFavouriteWidget() {
     isFavourite = false;
-    AppCaches.currentAccount.listFavouriteMovie.forEach((element) {
-      if (element.id == widget.movie.id) {
-        isFavourite = true;
-      }
-    });
+    if (AppCaches.currentAccount != null) {
+      AppCaches.currentAccount.listFavouriteMovie.forEach((element) {
+        if (element.id == widget.movie.id) {
+          isFavourite = true;
+        }
+      });
+    }
+
     return Center(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Container(
               child: FlatButton(
-            onPressed: () {
-              if (AppUtility.isLogin()) {
-                widget._moviesBloc
-                    .addFavouriteMovie(widget.movie, AppCaches.userId);
-                setState(() {
-                  isFavourite = !isFavourite;
-                });
-              } else {
-                _showDialogFavouriteMovie();
-              }
-            },
+            onPressed: actionFavourite,
+//            onPressed: () {
+//
+//              if (AppUtility.isLogin()) {
+//                widget._moviesBloc
+//                    .addFavouriteMovie(widget.movie, AppCaches.userId);
+//                setState(() {
+//                  AppCaches.currentAccount.listFavouriteMovie.add(widget.movie);
+//                  isFavourite = !isFavourite;
+//                });
+//              } else {
+//                _showDialogFavouriteMovie();
+//              }
+//            },
             child: Column(
               children: <Widget>[
                 Container(
@@ -453,7 +488,10 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
             alignment: Alignment.topLeft,
             child: Text(
               "Tương tự",
-              style: TextStyle(decoration: TextDecoration.underline, fontSize: 20, color: Colors.white),
+              style: TextStyle(
+                  decoration: TextDecoration.underline,
+                  fontSize: 20,
+                  color: Colors.white),
             ),
           ),
           SizedBox(

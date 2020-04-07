@@ -113,12 +113,17 @@ class AccountBloc {
     return account;
   }
 
-  Future<Account> getAccountCache() async {
+  getAccountCache() async {
+    //Account account = await AppCaches.getAccount();
     String id = await AppCaches.getCacheUserId();
+    //String id = account.id;
     if (!AppUtility.stringNullOrEmpty(id)) {
       Account account = await getAccount(id);
+      AppCaches.currentAccount = account;
+      AppCaches.isLogin = true;
       _accountObject.sink.add(account);
     } else {
+      AppCaches.isLogin = false;
       _accountObject.sink.add(null);
     }
   }

@@ -97,6 +97,7 @@ class _RegisterPageState extends State<RegisterPage> {
           builder: (context, snapshot) {
             var textError = (snapshot.hasData) ? snapshot.data : null;
             return TextField(
+              obscureText: true,
               controller: _passController,
               onTap: _accountBloc.resetPasswordTextField,
               cursorRadius: Radius.circular(12),

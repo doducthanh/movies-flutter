@@ -127,6 +127,7 @@ class _LoginPageState extends State<LoginPage> {
           builder: (context, snapshot) {
             var textError = (snapshot.hasData) ? snapshot.data : null;
             return TextField(
+              obscureText: true,
               onTap: _accountBloc.resetPasswordTextField,
               controller: _passwordController,
               cursorRadius: Radius.circular(12),
@@ -160,6 +161,8 @@ class _LoginPageState extends State<LoginPage> {
             ProgressHUD.of(context).dismiss();
 
             AppCaches.currentAccount = await _accountBloc.getAccount(AppCaches.userId);
+            AppCaches.setCacheUserId(AppCaches.userId);
+            AppCaches.cacheAccount(AppCaches.currentAccount);
             AppCaches.isLogin = true;
 
             if (widget.loginCallback != null) {

@@ -15,4 +15,6 @@ class ImagePathConst {
   static const String icPlayWhite = "assets/icons/ic_play_white.png";
   static const String icShareGray = "assets/icons/ic_share_gray.png";
   static const String icSearchGray = "assets/icons/ic_search_gray.png";
+  static const String icSkipNext = "assets/icons/ic_skip_next.png";
+  static const String icSkipBack = "assets/icons/ic_skip_back.png";
 }

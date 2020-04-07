@@ -25,4 +25,6 @@ class Account {
         "email": email,
         "favourites": List<dynamic>.from(listFavouriteMovie.map((x) => x.toJson())),
       };
+
+  String toString() => toJson().toString();
 }
