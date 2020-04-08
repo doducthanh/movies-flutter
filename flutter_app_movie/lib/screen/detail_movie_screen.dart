@@ -191,10 +191,17 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
   Widget _buildImageAndNameMovie() {
     return Column(
       children: <Widget>[
-        Container(
-          child: Image.network(
-            widget.movie.image,
-            height: 250,
+        TweenAnimationBuilder(
+          tween: Tween<double>(begin: 0, end: 1),
+          duration: Duration(seconds: 1),
+          builder: (context, scale, child){
+            return Transform.scale(scale: scale, child: child,);
+          },
+          child: Container(
+            child: Image.network(
+              widget.movie.image,
+              height: 250,
+            ),
           ),
         ),
         Container(

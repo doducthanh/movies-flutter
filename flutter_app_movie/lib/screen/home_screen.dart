@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/cupertino.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterappmovie/bloc/actors_bloc.dart';
 import 'package:flutterappmovie/bloc/movies_bloc.dart';
+import 'package:flutterappmovie/common/base_router.dart';
 import 'package:flutterappmovie/common/cache.dart';
 import 'package:flutterappmovie/common/value_const.dart';
 import 'package:flutterappmovie/model/account.dart';
@@ -14,16 +16,17 @@ import 'package:flutterappmovie/module_example/dartboard_list_tutorial.dart';
 import 'package:flutterappmovie/screen/detail_movie_screen.dart';
 import 'package:flutterappmovie/screen/playing_screen.dart';
 import 'package:flutterappmovie/screen/search_movie_screen.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../common/colors_const.dart';
 import '../common/image_path_const.dart';
 
 class HomePage extends StatefulWidget {
-  List<Movie> _allMovies = [];
+//  List<Movie> _allMovies = [];
+//
+//
 
-  int indexPageIndicator = 0;
-
-  Account account;
+  final Account account;
 
   HomePage({this.account});
 
@@ -36,10 +39,10 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   MoviesBloc _moviesBloc = MoviesBloc();
   ActorsBloc _actorsBloc = ActorsBloc();
-
+  int indexPageIndicator = 0;
   bool isFavourite = false;
 
-  List<Movie> _allMovie = [];
+  List<Movie> _allMovies = [];
 
   @override
   void initState() {
@@ -84,15 +87,15 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
                 stream: _moviesBloc.getMoviesStream,
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) {
-                    widget._allMovies = [];
+                    _allMovies = [];
                   } else {
-                    widget._allMovies = snapshot.data;
+                    _allMovies = snapshot.data;
                   }
                   return Column(
                     children: <Widget>[
                       Stack(
                         children: <Widget>[
-                          _buildCaroulSlider(widget._allMovies),
+                          _buildCaroulSlider(_allMovies),
                           Positioned(
                             top: 0,
                             left: 0,
@@ -120,8 +123,8 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
                       SizedBox(
                         height: 18,
                       ),
-                      _buildListMoviePopullar(widget._allMovies),
-                      _buildListMoviePopullar(widget._allMovies),
+                      _buildListMoviePopullar(_allMovies),
+                      _buildListMoviePopullar(_allMovies),
                       StreamBuilder<List<Actor>>(
                         stream: _actorsBloc.getSubject.stream,
                         builder: (context, snapshot) {
@@ -167,19 +170,30 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
                     } else {
                       isFavourite = false;
                     }
-                    widget.indexPageIndicator = index;
+                    indexPageIndicator = index;
                   });
                 },
                 items: listMovie.map((movie) {
-                  return Image.network(
-                    movie.image,
-                    width: MediaQuery.of(context).size.width,
+                  return CachedNetworkImage(
+                    imageUrl: movie.image,
                     fit: BoxFit.fitWidth,
+                    width: MediaQuery.of(context).size.width,
+                    placeholder: (context, url) {
+                      return Shimmer.fromColors(
+                        child: Container(
+                          height: 300,
+                        ),
+                        baseColor: Colors.grey[300],
+                        highlightColor: Colors.white,
+                        period: Duration(microseconds: 1500),
+                      );
+                    },
+                    errorWidget: (context, url, error) => Icon(Icons.error),
                   );
                 }).toList()),
             DotsIndicator(
               dotsCount: listMovie.length,
-              position: widget.indexPageIndicator.toDouble(),
+              position: indexPageIndicator.toDouble(),
             )
           ],
         ),
@@ -211,7 +225,7 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              SearchMoviePage(widget._allMovies)));
+                              SearchMoviePage(_allMovies)));
                 },
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
@@ -275,7 +289,7 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
     return FlatButton(
       onPressed: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => PlayingPage()));
+            context, ScaleRouter(page: PlayingPage()));
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 30),
@@ -510,11 +524,14 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
         padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
         child: Column(
           children: <Widget>[
-            Image.network(
-              imgPath,
+            CachedNetworkImage(
+              imageUrl: imgPath,
               fit: BoxFit.fitHeight,
               height: 170,
+              placeholder: (context, url) => CircularProgressIndicator(),
+              errorWidget: (context, url, error) => Icon(Icons.error),
             ),
+
             SizedBox(
               height: 6,
             ),
