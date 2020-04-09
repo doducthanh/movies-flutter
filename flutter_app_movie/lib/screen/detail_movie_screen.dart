@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterappmovie/bloc/movies_bloc.dart';
+import 'package:flutterappmovie/common/base_router.dart';
 import 'package:flutterappmovie/common/cache.dart';
 import 'package:flutterappmovie/common/colors_const.dart';
 import 'package:flutterappmovie/common/image_path_const.dart';
@@ -246,7 +247,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
     return FlatButton(
       onPressed: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => PlayingPage()));
+            context, ScaleRouter(page: PlayingPage()));
       },
       child: Container(
         height: 40,

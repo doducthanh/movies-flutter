@@ -91,7 +91,6 @@ class _PlayingPageState extends State<PlayingPage> {
 }
 
 class PlayAndPause extends StatefulWidget {
-
   VideoPlayerController _controller;
   BehaviorSubject<Duration> _behaviorSubject;
 
@@ -115,115 +114,141 @@ class _PlayAndPauseState extends State<PlayAndPause> {
           child: widget._controller.value.isPlaying
               ? SizedBox.shrink()
               : Stack(
-            children: <Widget>[
-              Container(
-                color: Colors.black26,
-                child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        GestureDetector(
-                          onTap: (){
-                            var result = ((widget._controller.value.position.inSeconds - 15) < 0);
-                            setState(() {
-                              widget._controller.seekTo(
-                                  Duration(seconds: result ? 0 : (widget._controller.value.position.inSeconds - 15)));
-                              widget.seekTo = widget._controller.value.position;
-                            });
-                          },
-                          child: Image.asset(
-                            ImagePathConst.icSkipBack,
-                            width: 30,
-                            height: 30,
-                          ),
-                        ),
-                        Icon(
-                          Icons.play_arrow,
-                          color: Colors.white,
-                          size: 80.0,
-                        ),
-                        GestureDetector(
-                          onTap: (){
-                            var result = ((widget._controller.value.position.inSeconds + 15) > widget._controller.value.duration.inSeconds);
-                            setState(() {
-                              widget._controller.seekTo(
-                                  Duration(seconds: result ? widget._controller.value.duration.inSeconds : (widget._controller.value.position.inSeconds + 15)));
-                              widget.seekTo = widget._controller.value.position;
-                            });
-
-                          },
-                          child: Image.asset(
-                            ImagePathConst.icSkipNext,
-                            width: 30,
-                            height: 30,
-                          ),
-                        )
-                      ],
-                    )),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  margin: EdgeInsets.only(bottom: 20),
-                  height: 80,
-                  child: StreamBuilder<Duration>(
-                      stream: widget._behaviorSubject.stream,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          widget.position = snapshot.data;
-                        }
-                        return Column(
-                          children: <Widget>[
-                            Expanded(
-                              child: Slider(
-                                min: 0.0,
-                                max: widget._controller
-                                    .value.duration.inSeconds
-                                    .toDouble(),
-                                inactiveColor: Colors.white,
-                                activeColor: Colors.blueAccent,
-                                value: snapshot.data.inSeconds
-                                    .toDouble(),
-                                onChanged: (newValue) {
-                                  widget._controller.seekTo(Duration(seconds: newValue.toInt()));
-                                  widget.seekTo = Duration(
-                                      seconds: newValue.toInt());
-                                  widget._behaviorSubject.sink.add(Duration(
-                                      seconds: newValue.toInt()));
-                                },
-                              ),
+                  children: <Widget>[
+                    Container(
+                      color: Colors.black26,
+                      child: Center(
+                          child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: () {
+                              var result = ((widget._controller.value.position
+                                          .inSeconds -
+                                      15) <
+                                  0);
+                              setState(() {
+                                widget._controller.seekTo(Duration(
+                                    seconds: result
+                                        ? 0
+                                        : (widget._controller.value.position
+                                                .inSeconds -
+                                            15)));
+                                widget.seekTo =
+                                    widget._controller.value.position;
+                              });
+                            },
+                            child: Image.asset(
+                              ImagePathConst.icSkipBack,
+                              width: 30,
+                              height: 30,
                             ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                    16, 0, 16, 10),
-                                child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Text(
-                                      AppUtility.formatDurationSring(
-                                          (snapshot.data == null) ? widget.position : snapshot.data),
-                                      style: TextStyle(
-                                          color: Colors.white),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              widget._controller.play();
+                              setState(() {});
+                            },
+                            child: Icon(
+                              Icons.play_arrow,
+                              color: Colors.white,
+                              size: 80.0,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              var result = ((widget._controller.value.position
+                                          .inSeconds +
+                                      15) >
+                                  widget._controller.value.duration.inSeconds);
+                              setState(() {
+                                widget._controller.seekTo(Duration(
+                                    seconds: result
+                                        ? widget._controller.value.duration
+                                            .inSeconds
+                                        : (widget._controller.value.position
+                                                .inSeconds +
+                                            15)));
+                                widget.seekTo =
+                                    widget._controller.value.position;
+                              });
+                            },
+                            child: Image.asset(
+                              ImagePathConst.icSkipNext,
+                              width: 30,
+                              height: 30,
+                            ),
+                          )
+                        ],
+                      )),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        margin: EdgeInsets.only(bottom: 20),
+                        height: 80,
+                        child: StreamBuilder<Duration>(
+                            stream: widget._behaviorSubject.stream,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                widget.position = snapshot.data;
+                              }
+                              return Column(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Slider(
+                                      min: 0.0,
+                                      max: widget
+                                          ._controller.value.duration.inSeconds
+                                          .toDouble(),
+                                      inactiveColor: Colors.white,
+                                      activeColor: Colors.blueAccent,
+                                      value: snapshot.data.inSeconds.toDouble(),
+                                      onChanged: (newValue) {
+                                        widget._controller.seekTo(Duration(
+                                            seconds: newValue.toInt()));
+                                        widget.seekTo =
+                                            Duration(seconds: newValue.toInt());
+                                        widget._behaviorSubject.sink.add(
+                                            Duration(
+                                                seconds: newValue.toInt()));
+                                      },
                                     ),
-                                    Text(
-                                      AppUtility.formatDurationSring(
-                                          widget._controller.value.duration),
-                                      style: TextStyle(
-                                          color: Colors.white),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            )
-                          ],
-                        );
-                      }),
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          16, 0, 16, 10),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Text(
+                                            AppUtility.formatDurationSring(
+                                                (snapshot.data == null)
+                                                    ? widget.position
+                                                    : snapshot.data),
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                          Text(
+                                            AppUtility.formatDurationSring(
+                                                widget._controller.value
+                                                    .duration),
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              );
+                            }),
+                      ),
+                    )
+                  ],
                 ),
-              )
-            ],
-          ),
         ),
         GestureDetector(
           onTap: () {
@@ -231,143 +256,39 @@ class _PlayAndPauseState extends State<PlayAndPause> {
                 ? widget._controller.pause()
                 : widget._controller.play();
           },
+          child: !widget._controller.value.isPlaying
+              ?  Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.topRight,
+                  child: SafeArea(
+                    child: GestureDetector(
+                      onTap: (){
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(right: 16, top: 10),
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.grey[300],
+                        ),
+                        child: Icon(Icons.close),
+                      ),
+                    ),
+                  ),
+                ),
+                Container()
+              ],
+            ),
+          ) : SizedBox()
         ),
       ],
     );
   }
 }
 
-
-//class PlayAndPause extends StatelessWidget {
-//  VideoPlayerController _controller;
-//  BehaviorSubject<Duration> _behaviorSubject;
-//
-//  PlayAndPause(this._controller, this._behaviorSubject);
-//
-//  Duration seekTo = null;
-//  Duration position = Duration(seconds: 0);
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    // TODO: implement build
-//    return Stack(
-//      children: <Widget>[
-//        AnimatedSwitcher(
-//          duration: Duration(milliseconds: 50),
-//          reverseDuration: Duration(milliseconds: 200),
-//          child: _controller.value.isPlaying
-//              ? SizedBox.shrink()
-//              : Stack(
-//                  children: <Widget>[
-//                    Container(
-//                      color: Colors.black26,
-//                      child: Center(
-//                          child: Row(
-//                        mainAxisAlignment: MainAxisAlignment.center,
-//                        children: <Widget>[
-//                          GestureDetector(
-//                            onTap: (){
-//                              var result = ((_controller.value.position.inSeconds - 15) < 0);
-//                              _controller.seekTo(
-//                                  Duration(seconds: result ? 0 : (_controller.value.position.inSeconds - 15)));
-//                            },
-//                            child: Image.asset(
-//                              ImagePathConst.icSkipBack,
-//                              width: 30,
-//                              height: 30,
-//                            ),
-//                          ),
-//                          Icon(
-//                            Icons.play_arrow,
-//                            color: Colors.white,
-//                            size: 80.0,
-//                          ),
-//                          GestureDetector(
-//                            onTap: (){
-//                              var result = ((_controller.value.position.inSeconds + 15) > _controller.value.duration.inSeconds);
-//                              _controller.seekTo(
-//                                  Duration(seconds: result ? _controller.value.duration.inSeconds : (_controller.value.position.inSeconds + 15)));
-//                            },
-//                            child: Image.asset(
-//                              ImagePathConst.icSkipNext,
-//                              width: 30,
-//                              height: 30,
-//                            ),
-//                          )
-//                        ],
-//                      )),
-//                    ),
-//                    Align(
-//                      alignment: Alignment.bottomCenter,
-//                      child: Container(
-//                        margin: EdgeInsets.only(bottom: 20),
-//                        height: 80,
-//                        child: StreamBuilder<Duration>(
-//                            stream: _behaviorSubject.stream,
-//                            builder: (context, snapshot) {
-//                              if (snapshot.hasData) {
-//                                position = snapshot.data;
-//                              }
-//                              return Column(
-//                                children: <Widget>[
-//                                  Expanded(
-//                                    child: Slider(
-//                                      min: 0.0,
-//                                      max: _controller
-//                                          .value.duration.inSeconds
-//                                          .toDouble(),
-//                                      inactiveColor: Colors.white,
-//                                      activeColor: Colors.blueAccent,
-//                                      value: snapshot.data.inSeconds
-//                                              .toDouble(),
-//                                      onChanged: (newValue) {
-//                                        seekTo = Duration(
-//                                            seconds: newValue.toInt());
-//                                        _behaviorSubject.sink.add(Duration(
-//                                            seconds: newValue.toInt()));
-//                                      },
-//                                    ),
-//                                  ),
-//                                  Expanded(
-//                                    child: Padding(
-//                                      padding: const EdgeInsets.fromLTRB(
-//                                          16, 0, 16, 10),
-//                                      child: Row(
-//                                        mainAxisAlignment:
-//                                            MainAxisAlignment.spaceBetween,
-//                                        children: <Widget>[
-//                                          Text(
-//                                            AppUtility.formatDurationSring(
-//                                                (snapshot.data == null) ? position : snapshot.data),
-//                                            style: TextStyle(
-//                                                color: Colors.white),
-//                                          ),
-//                                          Text(
-//                                            AppUtility.formatDurationSring(
-//                                                _controller.value.duration),
-//                                            style: TextStyle(
-//                                                color: Colors.white),
-//                                          )
-//                                        ],
-//                                      ),
-//                                    ),
-//                                  )
-//                                ],
-//                              );
-//                            }),
-//                      ),
-//                    )
-//                  ],
-//                ),
-//        ),
-//        GestureDetector(
-//          onTap: () {
-//            _controller.value.isPlaying
-//                ? _controller.pause()
-//                : _controller.play();
-//          },
-//        ),
-//      ],
-//    );
-//  }
-//}

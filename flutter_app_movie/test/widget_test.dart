@@ -1,30 +1,28 @@
-//// This is a basic Flutter widget test.
-////
-//// To perform an interaction with a widget in your test, use the WidgetTester
-//// utility that Flutter provides. For example, you can send tap and scroll
-//// gestures. You can also use WidgetTester to find child widgets in the widget
-//// tree, read text, and verify that the values of widget properties are correct.
-//
-//import 'package:flutter/material.dart';
-//import 'package:flutter_test/flutter_test.dart';
-//
-//import 'package:flutterappmovie/main.dart';
-//
-//void main() {
-//  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-//    // Build our app and trigger a frame.
-//    await tester.pumpWidget(MyApp());
-//
-//    // Verify that our counter starts at 0.
-//    expect(find.text('0'), findsOneWidget);
-//    expect(find.text('1'), findsNothing);
-//
-//    // Tap the '+' icon and trigger a frame.
-//    await tester.tap(find.byIcon(Icons.add));
-//    await tester.pump();
-//
-//    // Verify that our counter has incremented.
-//    expect(find.text('0'), findsNothing);
-//    expect(find.text('1'), findsOneWidget);
-//  });
-//}
+import 'package:flutter_test/flutter_test.dart';
+import 'package:flutterappmovie/bloc/movies_bloc.dart';
+import 'package:flutterappmovie/model/movie.dart';
+import 'package:flutterappmovie/utility/app_utility.dart';
+
+void main() {
+  var movieBloc = MoviesBloc();
+  var movie = Movie(id: "123456",
+      duration: 120,
+      image: "",
+      overview: "test",
+      director: "",
+      actors: "",
+      watching: 0);
+
+  test("demo test", () {
+    expect(AppUtility.formatNumberString(1), "01");
+    expect(AppUtility.formatNumberString(1), "1");
+  });
+
+  test("test bloc movie", () async {
+    var movieBloc = MoviesBloc();
+    var movie = Movie(id: "123456", duration: 120, image: "", overview: "test", director: "", actors: "", watching: 0);
+    await movieBloc.listMovies();
+    movieBloc.getStreamController.sink.add([movie]);
+    expectLater(movieBloc, MoviesBloc);
+  });
+}
