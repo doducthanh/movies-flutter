@@ -1,6 +1,20 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterappmovie/common/colors_const.dart';
+
+class ReceivedNotification {
+  final int id;
+  final String title;
+  final String body;
+  final String payload;
+
+  ReceivedNotification({
+    @required this.id,
+    @required this.title,
+    @required this.body,
+    @required this.payload,
+  });
+}
 
 class AccountPage extends StatefulWidget {
   @override
@@ -11,6 +25,10 @@ class _AccountPageState extends State<AccountPage> {
   String _message = '';
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
+  get onDidReceiveLocalNotification => null;
+
+  get didReceiveLocalNotificationSubject => null;
 
   _register() {
     _firebaseMessaging.getToken().then((token) => print(token));
@@ -23,17 +41,19 @@ class _AccountPageState extends State<AccountPage> {
     getMessage();
   }
 
+
   void getMessage(){
     _firebaseMessaging.configure(
         onMessage: (Map<String, dynamic> message) async {
           print('on message $message');
+          BotToast.showSimpleNotification(title: message.toString());
           setState(() => _message = message.toString());
-
         }, onResume: (Map<String, dynamic> message) async {
       print('on resume $message');
       setState(() => _message = message.toString());
     }, onLaunch: (Map<String, dynamic> message) async {
       print('on launch $message');
+      BotToast.showSimpleNotification(title: _message, duration: Duration(seconds: 5));
       setState(() => _message = message.toString());
     });
 
@@ -68,6 +88,10 @@ class _AccountPageState extends State<AccountPage> {
                     _register();
                   },
                 ),
+
+                RaisedButton(
+                  child: Text("Push Notification"),
+                )
                 // Text("Message: $message")
               ]),
         ),

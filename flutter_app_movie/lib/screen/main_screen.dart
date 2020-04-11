@@ -7,8 +7,10 @@ import 'package:flutterappmovie/common/cache.dart';
 import 'package:flutterappmovie/model/account.dart';
 import 'package:flutterappmovie/screen/account_screen.dart';
 import 'package:flutterappmovie/screen/activity_screen.dart';
+import 'package:flutterappmovie/screen/detail_movie_screen.dart';
 import 'package:flutterappmovie/screen/login/login_screen.dart';
 import 'package:flutterappmovie/screen/news_screen.dart';
+import 'package:flutterappmovie/screen/playing_screen.dart';
 import 'package:flutterappmovie/screen/videos_screen.dart';
 
 import '../common/base_bottom_bar_item.dart';
@@ -93,6 +95,16 @@ class MainPageState extends State<MainPage> {
         style: TextStyle(color: Colors.green, fontSize: 14),
       ),
     ));
+  }
+
+  Future<dynamic> myBackgroundMessagerHandler(Map<String, dynamic> message){
+    if (message.containsKey("data")){
+      Navigator.push(context, MaterialPageRoute(builder: (context) => PlayingPage()));
+    }
+
+    if (message.containsKey("notification")) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => PlayingPage()));
+    }
   }
 
   @override
