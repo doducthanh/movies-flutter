@@ -18,8 +18,8 @@ import 'package:flutterappmovie/screen/playing_screen.dart';
 import 'package:flutterappmovie/screen/search_movie_screen.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../common/colors_const.dart';
-import '../common/image_path_const.dart';
+import '../../common/colors_const.dart';
+import '../../common/image_path_const.dart';
 
 class HomePage extends StatefulWidget {
 //  List<Movie> _allMovies = [];

@@ -1,7 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 
-import 'screen/main_screen.dart';
+import 'screen/tab/main_screen.dart';
 
 class MyApp extends StatelessWidget {
 

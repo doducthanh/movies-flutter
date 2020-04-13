@@ -5,7 +5,7 @@ import 'package:flutterappmovie/bloc/account_bloc.dart';
 import 'package:flutterappmovie/common/cache.dart';
 import 'package:flutterappmovie/common/image_path_const.dart';
 import 'package:flutterappmovie/screen/login/register_screen.dart';
-import 'package:flutterappmovie/screen/main_screen.dart';
+import 'package:flutterappmovie/screen/tab/main_screen.dart';
 import 'package:flutterappmovie/utility/app_utility.dart';
 
 class LoginPage extends StatefulWidget {

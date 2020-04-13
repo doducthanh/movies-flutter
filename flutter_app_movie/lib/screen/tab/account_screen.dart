@@ -2,6 +2,8 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
+import '../playing_screen.dart';
+
 class ReceivedNotification {
   final int id;
   final String title;
@@ -41,6 +43,19 @@ class _AccountPageState extends State<AccountPage> {
     getMessage();
   }
 
+  static Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
+    if (message.containsKey('data')) {
+      // Handle data message
+      final dynamic data = message['data'];
+    }
+
+    if (message.containsKey('notification')) {
+      // Handle notification message
+      final dynamic notification = message['notification'];
+    }
+
+    print("callback notification click");
+  }
 
   void getMessage(){
     _firebaseMessaging.configure(
@@ -55,7 +70,9 @@ class _AccountPageState extends State<AccountPage> {
       print('on launch $message');
       BotToast.showSimpleNotification(title: _message, duration: Duration(seconds: 5));
       setState(() => _message = message.toString());
-    });
+    },
+     onBackgroundMessage: myBackgroundMessageHandler
+    );
 
     _firebaseMessaging.requestNotificationPermissions(
         const IosNotificationSettings(sound: true, badge: true, alert: true));

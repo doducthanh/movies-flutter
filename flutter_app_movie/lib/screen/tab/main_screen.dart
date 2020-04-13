@@ -5,16 +5,17 @@ import 'package:flutterappmovie/bloc/account_bloc.dart';
 import 'package:flutterappmovie/common/app_const.dart';
 import 'package:flutterappmovie/common/cache.dart';
 import 'package:flutterappmovie/model/account.dart';
-import 'package:flutterappmovie/screen/account_screen.dart';
+import 'package:flutterappmovie/screen/tab/account_screen.dart';
 import 'package:flutterappmovie/screen/activity_screen.dart';
 import 'package:flutterappmovie/screen/detail_movie_screen.dart';
 import 'package:flutterappmovie/screen/login/login_screen.dart';
-import 'package:flutterappmovie/screen/news_screen.dart';
+import 'package:flutterappmovie/screen/tab/news_screen.dart';
 import 'package:flutterappmovie/screen/playing_screen.dart';
-import 'package:flutterappmovie/screen/videos_screen.dart';
+import 'package:flutterappmovie/screen/tab/videos_screen.dart';
+import 'package:flutterappmovie/utility/notification.dart';
 
-import '../common/base_bottom_bar_item.dart';
-import '../common/colors_const.dart';
+import '../../common/base_bottom_bar_item.dart';
+import '../../common/colors_const.dart';
 import 'home_screen.dart';
 
 class MainPage extends StatefulWidget {
@@ -111,6 +112,8 @@ class MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     widget._accountBloc.getAccountCache();
+    FCMNotification fcm = FCMNotification();
+    fcm.configFirebase();
   }
 
   @override
