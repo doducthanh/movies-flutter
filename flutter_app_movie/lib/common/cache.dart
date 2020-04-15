@@ -9,8 +9,7 @@ class AppCaches {
   static List<Movie> listMoview = [];
   static bool isLogin = false;
   static String userId = "";
-
-
+  
   static Account currentAccount;
 
   static setCacheUserId(String id) async {

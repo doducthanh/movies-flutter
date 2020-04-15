@@ -9,6 +9,7 @@ import 'package:flutterappmovie/screen/tab/account_screen.dart';
 import 'package:flutterappmovie/screen/activity_screen.dart';
 import 'package:flutterappmovie/screen/detail_movie_screen.dart';
 import 'package:flutterappmovie/screen/login/login_screen.dart';
+import 'package:flutterappmovie/screen/tab/contacts_screen.dart';
 import 'package:flutterappmovie/screen/tab/news_screen.dart';
 import 'package:flutterappmovie/screen/playing_screen.dart';
 import 'package:flutterappmovie/screen/tab/videos_screen.dart';
@@ -186,7 +187,7 @@ class MainPageState extends State<MainPage> {
             offstage: _currentSelected != 3,
             child: new TickerMode(
               enabled: _currentSelected == 3,
-              child: new Text('3'),
+              child: new ContactsPage(),
             ),
           ),
           new Offstage(

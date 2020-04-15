@@ -1,21 +1,13 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutterappmovie/common/app_const.dart';
-import 'package:encrypt/encrypt.dart';
 import 'package:flutterappmovie/common/cache.dart';
 
+enum Device {
+  mobile, ipadTablet
+}
+
 class AppUtility {
-
-  ///ham ma hoa password
-  static String encodeString(String input) {
-    return AppConst.encrypter.encrypt(input, iv: AppConst.iv).toString();
-  }
-
-  ///ham giai ma pass
-  static String decodeString(String input) {
-    Encrypted encrypted = input as Encrypted;
-    return AppConst.encrypter.decrypt(encrypted, iv: AppConst.iv).toString();
-  }
 
   static bool isLogin() {
     if (AppCaches.isLogin) {
@@ -46,4 +38,5 @@ class AppUtility {
   static String formatNumberString(int number) {
     return (number < 10) ? ("0" + number.toString()) : number.toString();
   }
+
 }

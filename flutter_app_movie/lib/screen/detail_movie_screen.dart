@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterappmovie/bloc/movies_bloc.dart';
+import 'package:flutterappmovie/common/app_const.dart';
 import 'package:flutterappmovie/common/base_router.dart';
 import 'package:flutterappmovie/common/cache.dart';
 import 'package:flutterappmovie/common/colors_const.dart';
@@ -35,6 +36,8 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
 
   VideoPlayerController _playerController;
 
+  double scale = 0;
+
   void actionFavourite() {
     if (AppCaches.isLogin) {
       var movieExist = false;
@@ -60,6 +63,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
   @override
   void initState() {
     super.initState();
+    
     _playerController = VideoPlayerController.network(
         "http://clips.vorwaerts-gmbh.de/VfE_html5.mp4")
       ..initialize().then((_) {});
@@ -98,6 +102,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
   }
 
   Widget _buildHeaderWidget() {
+    scale = AppConst.isTablet(context) ? 1.2 : 1.0;
     return Container(
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -108,7 +113,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
               children: <Widget>[
                 Positioned(
                   child: Container(
-                      height: 280,
+                      height: 280*scale,
                       child: PlayingPage(
                           url:
                               'http://www.sample-videos.com/video123/mp4/720/big_buck_bunny_720p_20mb.mp4')),
@@ -122,7 +127,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
               child: Stack(
                 children: <Widget>[
                   Container(
-                    height: 350,
+                    height: 350*scale,
                     decoration: new BoxDecoration(
                       image: new DecorationImage(
                         image: NetworkImage(widget.movie.image),
@@ -190,6 +195,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
   }
 
   Widget _buildImageAndNameMovie() {
+    scale = AppConst.isTablet(context) ? 1.2 : 1.0;
     return Column(
       children: <Widget>[
         TweenAnimationBuilder(
@@ -201,7 +207,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
           child: Container(
             child: Image.network(
               widget.movie.image,
-              height: 250,
+              height: 250 * scale,
             ),
           ),
         ),

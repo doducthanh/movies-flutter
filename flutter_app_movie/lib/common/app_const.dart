@@ -1,4 +1,4 @@
-import 'package:encrypt/encrypt.dart';
+import 'package:flutter/cupertino.dart';
 
 class AppConst {
   static final String apiKey = 'bcd14bb147b438c7bf30b3504fd99915';
@@ -10,8 +10,5 @@ class AppConst {
   static final String contactBarTitle = 'Danh bạ';
   static final String accountBarTitle = 'Tài khoản';
 
-  /// ma hoa
-  static final key = Key.fromLength(32);
-  static final iv = IV.fromLength(16);
-  static final encrypter = Encrypter(AES(key));
+  static bool isTablet(BuildContext context) => (MediaQuery.of(context).size.width > 800);
 }

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:flutterappmovie/bloc/account_bloc.dart';
+import 'package:flutterappmovie/common/colors_const.dart';
 import 'package:flutterappmovie/common/image_path_const.dart';
 import 'package:flutterappmovie/screen/login/login_screen.dart';
 
@@ -21,9 +22,10 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: ColorsConst.mainColor,
         title: Text('Đăng ký'),
         leading: FlatButton(
-          child: IconButton(icon: Icon(Icons.arrow_back_ios),),
+          child: IconButton(icon: Icon(Icons.arrow_back_ios, color: Colors.white,),),
           onPressed: (){
             Navigator.pop(context,
                 CupertinoPageRoute(builder: (context) => LoginPage()));

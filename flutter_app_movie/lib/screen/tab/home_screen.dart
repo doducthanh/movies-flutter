@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterappmovie/bloc/actors_bloc.dart';
 import 'package:flutterappmovie/bloc/movies_bloc.dart';
+import 'package:flutterappmovie/common/app_const.dart';
 import 'package:flutterappmovie/common/base_router.dart';
 import 'package:flutterappmovie/common/cache.dart';
 import 'package:flutterappmovie/common/value_const.dart';
@@ -22,10 +23,6 @@ import '../../common/colors_const.dart';
 import '../../common/image_path_const.dart';
 
 class HomePage extends StatefulWidget {
-//  List<Movie> _allMovies = [];
-//
-//
-
   final Account account;
 
   HomePage({this.account});
@@ -124,6 +121,9 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
                         height: 18,
                       ),
                       _buildListMoviePopullar(_allMovies),
+                      SizedBox(
+                        height: 12,
+                      ),
                       _buildListMoviePopullar(_allMovies),
                       StreamBuilder<List<Actor>>(
                         stream: _actorsBloc.getSubject.stream,
@@ -148,14 +148,14 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   ///
   Widget _buildCaroulSlider(List<Movie> listMovie) {
     if (listMovie.length == 0) {
-      return _buildLoadingWidget(300);
+      return _buildLoadingWidget(AppConst.isTablet(context) ? 500 : 300);
     } else {
       return Container(
         width: MediaQuery.of(context).size.width,
         child: Column(
           children: <Widget>[
             CarouselSlider(
-                height: 300,
+                height: AppConst.isTablet(context) ? 500 : 300,
                 autoPlay: true,
                 viewportFraction: 1.0,
                 aspectRatio: 2.0,
@@ -188,7 +188,10 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
                         period: Duration(microseconds: 1500),
                       );
                     },
-                    errorWidget: (context, url, error) => Icon(Icons.error),
+                    errorWidget: (context, url, error) => Icon(
+                      Icons.error,
+                      color: Colors.white,
+                    ),
                   );
                 }).toList()),
             DotsIndicator(
@@ -224,8 +227,7 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              SearchMoviePage(_allMovies)));
+                          builder: (context) => SearchMoviePage(_allMovies)));
                 },
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
@@ -288,8 +290,7 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   Widget _buildPlayButtonWidget() {
     return FlatButton(
       onPressed: () {
-        Navigator.push(
-            context, ScaleRouter(page: PlayingPage()));
+        Navigator.push(context, ScaleRouter(page: PlayingPage()));
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 30),
@@ -364,42 +365,44 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
 
   ///ve templet cho 1 sp
   Widget _buildProductSunshine(String overview, String imgPath) {
+    double scale = AppConst.isTablet(context) ? 1.5 : 1.0;
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => DardBoardPage()));
+//        Navigator.push(
+//            context, MaterialPageRoute(builder: (context) => DardBoardPage()));
       },
       child: Padding(
         padding: const EdgeInsets.fromLTRB(0, 10, 6, 10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Container(
-              constraints: BoxConstraints(minHeight: 60, maxHeight: 70),
-              child: Stack(
-                children: <Widget>[
-                  Image(
-                    image: AssetImage(imgPath),
-                    height: 70,
-                    fit: BoxFit.fitWidth,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(4, 4, 0, 0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.redAccent,
-                          borderRadius: BorderRadius.circular(4.0)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: FittedBox(
-                            child: Text(
-                          '09 33',
-                          style: TextStyle(color: Colors.white, fontSize: 8),
-                        )),
-                      ),
+            Expanded(
+              child: Container(
+                child: Stack(
+                  children: <Widget>[
+                    Image(
+                      image: AssetImage(imgPath),
+                      height: 70 * scale,
+                      fit: BoxFit.fitHeight,
                     ),
-                  )
-                ],
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(4, 4, 0, 0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.redAccent,
+                            borderRadius: BorderRadius.circular(4.0)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: FittedBox(
+                              child: Text(
+                            '09 33',
+                            style: TextStyle(color: Colors.white, fontSize: 8),
+                          )),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
             Padding(
@@ -518,20 +521,21 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   }
 
   Widget _buildTempleMovie(String imgPath, String title) {
+    var scale = AppConst.isTablet(context) ? 1.2 : 1.0;
     return Container(
-      constraints: BoxConstraints(minHeight: 150, maxHeight: 220),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
         child: Column(
           children: <Widget>[
-            CachedNetworkImage(
-              imageUrl: imgPath,
-              fit: BoxFit.fitHeight,
-              height: 170,
-              placeholder: (context, url) => CircularProgressIndicator(),
-              errorWidget: (context, url, error) => Icon(Icons.error),
+            Expanded(
+              child: CachedNetworkImage(
+                imageUrl: imgPath,
+                fit: BoxFit.fitHeight,
+                height: 170 * scale,
+                placeholder: (context, url) => CircularProgressIndicator(),
+                errorWidget: (context, url, error) => Icon(Icons.error),
+              ),
             ),
-
             SizedBox(
               height: 6,
             ),
@@ -549,7 +553,9 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   }
 
   Widget _buildListActors(List<Actor> listActor) {
-    return Padding(
+    var scale = AppConst.isTablet(context) ? 1.5 : 1.0;
+    return Container(
+      constraints: BoxConstraints(maxHeight: 110 * scale),
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
       child: Column(
         children: <Widget>[
@@ -566,10 +572,12 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
                     fontWeight: FontWeight.bold),
               )),
           (listActor.length == 0)
-              ? CircularProgressIndicator()
-              : Container(
-                  height: 150,
+              ? Container(
+                  height: 80 * scale,
+                )
+              : Expanded(
                   child: ListView.builder(
+                      shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
                       itemCount: listActor.length,
                       itemBuilder: (context, index) {
@@ -578,17 +586,19 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
                         } else {
                           var actor = listActor[index];
                           return Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 10, 8, 8),
+                            padding: const EdgeInsets.all(10),
                             child: Column(
                               children: <Widget>[
-                                Container(
-                                  width: 80,
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                          fit: BoxFit.fill,
-                                          image: NetworkImage(actor.image))),
+                                Expanded(
+                                  child: Container(
+                                    width: 80,
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                            fit: BoxFit.fitWidth,
+                                            image: NetworkImage(actor.image))),
+                                  ),
                                 ),
                                 Text(
                                   actor.name,

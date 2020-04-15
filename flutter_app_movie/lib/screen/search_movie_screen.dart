@@ -84,65 +84,67 @@ class _SearchMoviePageState extends State<SearchMoviePage> {
                       child: Container(
                           margin: EdgeInsets.only(top: 16, left: 16, right: 16),
                           constraints: BoxConstraints(minHeight: 0),
-                          child: ListView.separated(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.vertical,
-                              itemBuilder: (context, index) {
-                                var movie = listResult.elementAt(index) ?? Movie();
-                                return GestureDetector(
-                                  onTap: (){
-                                    Navigator.pushReplacement(context,
-                                        MaterialPageRoute(builder: (context) => DetailMoviePage(movie, widget.allMovie)));
-                                  },
-                                  child: Container(
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: 10, bottom: 10),
-                                          child: Image.network(
-                                            movie.image,
-                                            height: 150,
-                                            fit: BoxFit.fitHeight,
+                          child: Flexible(
+                            child: ListView.separated(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.vertical,
+                                itemBuilder: (context, index) {
+                                  var movie = listResult.elementAt(index) ?? Movie();
+                                  return GestureDetector(
+                                    onTap: (){
+                                      Navigator.pushReplacement(context,
+                                          MaterialPageRoute(builder: (context) => DetailMoviePage(movie, widget.allMovie)));
+                                    },
+                                    child: Container(
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 10, bottom: 10),
+                                            child: Image.network(
+                                              movie.image,
+                                              height: 150,
+                                              fit: BoxFit.fitHeight,
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(
-                                          width: 16,
-                                        ),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text(
-                                                movie.name,
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 24),
-                                              ),
-                                              SizedBox(
-                                                height: 2,
-                                              ),
-                                              Text("Đạo diễn: ${movie.director}"),
-                                              SizedBox(
-                                                height: 2,
-                                              ),
-                                              Text("Diễn viên: ${movie.actors}"),
-                                            ],
+                                          SizedBox(
+                                            width: 16,
                                           ),
-                                        )
-                                      ],
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Text(
+                                                  movie.name,
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 24),
+                                                ),
+                                                SizedBox(
+                                                  height: 2,
+                                                ),
+                                                Text("Đạo diễn: ${movie.director}"),
+                                                SizedBox(
+                                                  height: 2,
+                                                ),
+                                                Text("Diễn viên: ${movie.actors}"),
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                              separatorBuilder: (context, index) => Container(
-                                    height: 1,
-                                    color: Colors.grey,
-                                  ),
-                              itemCount: widget.allMovie.length)),
+                                  );
+                                },
+                                separatorBuilder: (context, index) => Container(
+                                      height: 1,
+                                      color: Colors.grey,
+                                    ),
+                                itemCount: listResult.length),
+                          )),
                     )
                   : Text("")
             ],

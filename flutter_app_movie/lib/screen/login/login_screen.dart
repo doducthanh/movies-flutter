@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:flutterappmovie/bloc/account_bloc.dart';
 import 'package:flutterappmovie/common/cache.dart';
+import 'package:flutterappmovie/common/colors_const.dart';
 import 'package:flutterappmovie/common/image_path_const.dart';
 import 'package:flutterappmovie/screen/login/register_screen.dart';
 import 'package:flutterappmovie/screen/tab/main_screen.dart';
@@ -49,10 +50,11 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: ColorsConst.mainColor,
         title: Text('Đăng nhập'),
         leading: FlatButton(
           child: IconButton(
-            icon: Icon(Icons.arrow_back_ios),
+            icon: Icon(Icons.arrow_back_ios, color: Colors.white),
           ),
           onPressed: () {
             Navigator.pop(
@@ -100,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
       child: StreamBuilder<String>(
-          stream: _accountBloc.getUserNameStream,
+          stream: _accountBloc.getEmailStream,
           builder: (context, snapshot) {
             textError = (snapshot.hasData) ? snapshot.data : null;
             return TextField(
@@ -108,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
               controller: _usernameController,
               cursorRadius: Radius.circular(12),
               decoration: InputDecoration(
-                hintText: 'Username',
+                hintText: 'Email',
                 prefixIcon: Icon(Icons.person),
                 border:
                     OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
