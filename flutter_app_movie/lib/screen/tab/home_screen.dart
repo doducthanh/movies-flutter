@@ -208,82 +208,85 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   Widget _buildHeaderWidget() {
     return Container(
         child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Row(children: <Widget>[
-          Align(
-              child: Image(
-            image: AssetImage('assets/icLogo.png'),
-            height: 60,
-            fit: BoxFit.fitHeight,
-          )),
-        ]),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SearchMoviePage(_allMovies)));
-                },
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
-                  child: Container(
-                    padding: EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: ColorsConst.mainColor),
-                    child: Center(
-                        child: Image.asset(
-                      ImagePathConst.icSearchGray,
-                      width: 24,
-                      height: 24,
+            Row(children: <Widget>[
+              Align(
+                  child: Image(
+                    image: AssetImage('assets/icLogo.png'),
+                    height: 60,
+                    fit: BoxFit.fitHeight,
+                  )),
+            ]),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  SearchMoviePage(_allMovies)));
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
+                      child: Container(
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: ColorsConst.mainColor),
+                        child: Center(
+                            child: Image.asset(
+                              ImagePathConst.icSearchGray,
+                              width: 24,
+                              height: 24,
+                            )),
+                      ),
                     )),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isFavourite = !isFavourite;
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
+                    child: Container(
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: ColorsConst.mainColor),
+                        child: (isFavourite)
+                            ? Image.asset(
+                          ImagePathConst.icFavouriteRed,
+                          width: 24,
+                          height: 24,
+                        )
+                            : Image.asset(
+                          ImagePathConst.icFavouriteGray,
+                          width: 24,
+                          height: 24,
+                        )),
                   ),
-                )),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  isFavourite = !isFavourite;
-                });
-              },
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
-                child: Container(
-                    padding: EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: ColorsConst.mainColor),
-                    child: (isFavourite)
-                        ? Image.asset(
-                            ImagePathConst.icFavouriteRed,
-                            width: 24,
-                            height: 24,
-                          )
-                        : Image.asset(
-                            ImagePathConst.icFavouriteGray,
-                            width: 24,
-                            height: 24,
-                          )),
-              ),
+                ),
+                RaisedButton(
+                  onPressed: _showDialog,
+                  disabledColor: Colors.orange,
+                  color: Colors.orange,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: new BorderRadius.circular(18.0),
+                  ),
+                  child: Text('Mua gói',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: SizeTextConst.textDescripton)),
+                )
+              ],
             ),
-            RaisedButton(
-              onPressed: _showDialog,
-              disabledColor: Colors.orange,
-              color: Colors.orange,
-              shape: RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(18.0),
-              ),
-              child: Text('Mua gói',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: SizeTextConst.textDescripton)),
-            )
           ],
-        ),
-      ],
-    ));
+        ));
   }
 
   ///ve button play tren poster phim
@@ -531,8 +534,8 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
               child: CachedNetworkImage(
                 imageUrl: imgPath,
                 fit: BoxFit.fitHeight,
-                height: 170 * scale,
-                placeholder: (context, url) => CircularProgressIndicator(),
+                height: 150 * scale,
+                placeholder: (context, url) => Container(height: 150,),
                 errorWidget: (context, url, error) => Icon(Icons.error),
               ),
             ),
@@ -555,9 +558,10 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   Widget _buildListActors(List<Actor> listActor) {
     var scale = AppConst.isTablet(context) ? 1.5 : 1.0;
     return Container(
-      constraints: BoxConstraints(maxHeight: 110 * scale),
+      height: 150,
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           SizedBox(
             height: 10,
@@ -596,7 +600,7 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
                                     decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                         image: DecorationImage(
-                                            fit: BoxFit.fitWidth,
+                                            fit: BoxFit.fill,
                                             image: NetworkImage(actor.image))),
                                   ),
                                 ),

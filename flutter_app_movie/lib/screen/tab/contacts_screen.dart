@@ -56,7 +56,8 @@ class _ContactsPageState extends State<ContactsPage> {
               decoration: InputDecoration(
                   icon: Icon(Icons.search, color: Colors.black),
                   hintText: "Tìm kiếm",
-                  enabledBorder: InputBorder.none),
+                  enabledBorder: InputBorder.none,
+                  border: InputBorder.none),
             ),
           )
         ],
@@ -69,11 +70,11 @@ class _ContactsPageState extends State<ContactsPage> {
       padding: EdgeInsets.all(16),
       child: Flexible(
         child: ListView.builder(
-          shrinkWrap: true,
+            shrinkWrap: true,
             itemCount: 3,
             itemBuilder: (context, index) {
               return GestureDetector(
-                onTap: (){
+                onTap: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => ChatPage()));
                 },

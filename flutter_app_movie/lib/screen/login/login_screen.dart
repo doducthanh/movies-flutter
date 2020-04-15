@@ -10,9 +10,9 @@ import 'package:flutterappmovie/screen/tab/main_screen.dart';
 import 'package:flutterappmovie/utility/app_utility.dart';
 
 class LoginPage extends StatefulWidget {
-  Function loginCallback;
+  //Function loginCallback;
 
-  LoginPage({Key key, this.loginCallback})
+  LoginPage({Key key})
       : super(key: key);
 
   @override
@@ -38,8 +38,8 @@ class _LoginPageState extends State<LoginPage> {
       print("ddthanh: dang nhap thanh cong");
       ProgressHUD.of(context).dismiss();
       AppCaches.isLogin = true;
-      widget.loginCallback();
-      Navigator.pop(context);
+      Navigator.pushReplacement(
+          context, CupertinoPageRoute(builder: (context) => MainPage()));
     } else {
       ProgressHUD.of(context).dismiss();
       print("ddthanh: dang nhap that bai");
@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
             icon: Icon(Icons.arrow_back_ios, color: Colors.white),
           ),
           onPressed: () {
-            Navigator.pop(
+            Navigator.pushReplacement(
                 context, CupertinoPageRoute(builder: (context) => MainPage()));
           },
         ),
@@ -167,10 +167,7 @@ class _LoginPageState extends State<LoginPage> {
             AppCaches.cacheAccount(AppCaches.currentAccount);
             AppCaches.isLogin = true;
 
-            if (widget.loginCallback != null) {
-              widget.loginCallback();
-            }
-            Navigator.pop(context);
+            Navigator.push(context,MaterialPageRoute(builder: (context) => MainPage()));
           } else {
             ProgressHUD.of(context).dismiss();
             print("ddthanh: dang nhap that bai");

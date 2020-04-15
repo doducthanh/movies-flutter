@@ -63,9 +63,9 @@ class _NewsPageState extends State<NewsPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                Text(news.title, style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),),
+                                Text(news.title, style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),),
                                 SizedBox(height: 6,),
-                                Text(news.date, style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),)
+                                Text(news.date, style: TextStyle(color: Colors.white70, fontSize: 18, fontWeight: FontWeight.bold),)
                               ],
                             ),
                           )

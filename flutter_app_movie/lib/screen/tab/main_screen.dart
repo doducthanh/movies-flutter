@@ -25,9 +25,8 @@ class MainPage extends StatefulWidget {
     return MainPageState();
   }
 
-  AccountBloc _accountBloc = AccountBloc();
+  final AccountBloc _accountBloc = AccountBloc();
 
-  bool isLogin = false;
 }
 
 class MainPageState extends State<MainPage> {
@@ -43,7 +42,7 @@ class MainPageState extends State<MainPage> {
   ];
 
   int _currentSelected = 0;
-
+  bool isLogin = false;
   _selectedBottomBar(int index) {
     setState(() {
       _currentSelected = index;
@@ -54,7 +53,7 @@ class MainPageState extends State<MainPage> {
     BotToast.showSimpleNotification(title: "Đăng nhập thành công");
     widget._accountBloc.getAccountCache();
     setState(() {
-      widget.isLogin = true;
+      isLogin = true;
       AppCaches.isLogin = true;
     });
   }
@@ -115,6 +114,10 @@ class MainPageState extends State<MainPage> {
     widget._accountBloc.getAccountCache();
     FCMNotification fcm = FCMNotification();
     fcm.configFirebase();
+
+//    if(AppCaches.isLogin) {
+//      _actionAfterLogin();
+//    }
   }
 
   @override
@@ -137,11 +140,11 @@ class MainPageState extends State<MainPage> {
           var isLogin = false;
           if ((!snapshot.hasData) || (snapshot.data == null)) {
             isLogin = false;
+            isLogin = AppCaches.isLogin;
           } else {
             isLogin = true;
-            //AppCaches.currentAccount = snapshot.data;
-            //BotToast.showSimpleNotification(title: "Xin chào ${snapshot.data.username}");
           }
+
           return FloatingActionButton(
             child: Container(
               child: isLogin
@@ -151,11 +154,11 @@ class MainPageState extends State<MainPage> {
             onPressed: () {
               isLogin
                   ? _actionLogout()
-                  : Navigator.push(
+                  : Navigator.pushReplacement(
                       context,
                       CupertinoPageRoute(
                           builder: (context) =>
-                              LoginPage(loginCallback: _actionAfterLogin)));
+                              LoginPage()));
             },
           );
         }
@@ -204,7 +207,6 @@ class MainPageState extends State<MainPage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     widget._accountBloc.dispose();
   }

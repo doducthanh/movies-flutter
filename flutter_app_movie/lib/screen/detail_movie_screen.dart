@@ -63,7 +63,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
   @override
   void initState() {
     super.initState();
-    
+
     _playerController = VideoPlayerController.network(
         "http://clips.vorwaerts-gmbh.de/VfE_html5.mp4")
       ..initialize().then((_) {});
@@ -113,7 +113,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
               children: <Widget>[
                 Positioned(
                   child: Container(
-                      height: 280*scale,
+                      height: 280 * scale,
                       child: PlayingPage(
                           url:
                               'http://www.sample-videos.com/video123/mp4/720/big_buck_bunny_720p_20mb.mp4')),
@@ -127,7 +127,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
               child: Stack(
                 children: <Widget>[
                   Container(
-                    height: 350*scale,
+                    height: 350 * scale,
                     decoration: new BoxDecoration(
                       image: new DecorationImage(
                         image: NetworkImage(widget.movie.image),
@@ -201,8 +201,11 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
         TweenAnimationBuilder(
           tween: Tween<double>(begin: 0, end: 1),
           duration: Duration(seconds: 1),
-          builder: (context, scale, child){
-            return Transform.scale(scale: scale, child: child,);
+          builder: (context, scale, child) {
+            return Transform.scale(
+              scale: scale,
+              child: child,
+            );
           },
           child: Container(
             child: Image.network(
@@ -252,8 +255,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
   Widget _buildButtonPlay() {
     return FlatButton(
       onPressed: () {
-        Navigator.push(
-            context, ScaleRouter(page: PlayingPage()));
+        Navigator.push(context, ScaleRouter(page: PlayingPage()));
       },
       child: Container(
         height: 40,
@@ -580,10 +582,11 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
             actions: <Widget>[
               FlatButton(
                 child: Text("Đăng nhập"),
-                onPressed: () {
+                onPressed: () async {
                   Navigator.of(context).pop();
-                  Navigator.push(context,
+                  await Navigator.pushReplacement(context,
                       CupertinoPageRoute(builder: (context) => LoginPage()));
+                  setState(() {});
                 },
               ),
               FlatButton(
