@@ -33,7 +33,7 @@ class _PlayingPageState extends State<PlayingPage> {
         "http://clips.vorwaerts-gmbh.de/VfE_html5.mp4");
 
     _videoController.addListener(() {
-      if (_videoController.value.position != null ) {
+      if (_videoController.value.position != null) {
         _trackingObject.sink.add(_videoController.value.position);
         setState(() {});
       }
@@ -49,14 +49,14 @@ class _PlayingPageState extends State<PlayingPage> {
       onTap: () {
         _videoController.pause();
 
-        setState(() {
-          opacity = 1.0;
-          Future.delayed(Duration(seconds: 3)).then((value) {
-            setState(() {
-              opacity = 0.0;
-            });
-          });
-        });
+//        setState(() {
+//          opacity = 1.0;
+//          Future.delayed(Duration(seconds: 3)).then((value) {
+//            setState(() {
+//              opacity = 0.0;
+//            });
+//          });
+//        });
       },
       child: Scaffold(
         body: Container(
@@ -65,17 +65,21 @@ class _PlayingPageState extends State<PlayingPage> {
           height: MediaQuery.of(context).size.height,
           child: Stack(
             children: <Widget>[
-              Expanded(
-                  child: Container(
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
                 child: Center(
                   child: AspectRatio(
                       aspectRatio: _videoController.value.aspectRatio,
                       child: VideoPlayer(_videoController)),
                 ),
-              )),
+              ),
               Opacity(
                 opacity: opacity,
-                child: PlayAndPause(_videoController, _trackingObject),
+                child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    child: PlayAndPause(_videoController, _trackingObject)),
               )
             ],
           ),
@@ -118,6 +122,8 @@ class _PlayAndPauseState extends State<PlayAndPause> {
               : Stack(
                   children: <Widget>[
                     Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
                       color: Colors.black26,
                       child: Center(
                           child: Row(
@@ -207,7 +213,9 @@ class _PlayAndPauseState extends State<PlayAndPause> {
                                           .toDouble(),
                                       inactiveColor: Colors.white,
                                       activeColor: Colors.blueAccent,
-                                      value: snapshot.data.inSeconds.toDouble() ?? 0,
+                                      value:
+                                          snapshot.data.inSeconds.toDouble() ??
+                                              0,
                                       onChanged: (newValue) {
                                         widget._controller.seekTo(Duration(
                                             seconds: newValue.toInt()));
@@ -255,44 +263,43 @@ class _PlayAndPauseState extends State<PlayAndPause> {
                 ),
         ),
         GestureDetector(
-          onTap: () {
-            widget._controller.value.isPlaying
-                ? widget._controller.pause()
-                : widget._controller.play();
-          },
-          child: !widget._controller.value.isPlaying
-              ?  Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: Column(
-              children: <Widget>[
-                Align(
-                  alignment: Alignment.topRight,
-                  child: SafeArea(
-                    child: GestureDetector(
-                      onTap: (){
-                        Navigator.of(context).pop();
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(right: 16, top: 10),
-                        width: 30,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.grey[300],
+            onTap: () {
+              widget._controller.value.isPlaying
+                  ? widget._controller.pause()
+                  : widget._controller.play();
+            },
+            child: !widget._controller.value.isPlaying
+                ? Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    child: Column(
+                      children: <Widget>[
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: SafeArea(
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(right: 16, top: 10),
+                                width: 30,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.grey[300],
+                                ),
+                                child: Icon(Icons.close),
+                              ),
+                            ),
+                          ),
                         ),
-                        child: Icon(Icons.close),
-                      ),
+                        Container()
+                      ],
                     ),
-                  ),
-                ),
-                Container()
-              ],
-            ),
-          ) : SizedBox()
-        ),
+                  )
+                : SizedBox()),
       ],
     );
   }
 }
-

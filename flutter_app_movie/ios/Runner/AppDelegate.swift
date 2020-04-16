@@ -1,7 +1,6 @@
 import UIKit
 import Flutter
 import Firebase
-import NotificationCenter
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {

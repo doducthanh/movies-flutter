@@ -90,30 +90,34 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
                   }
                   return Column(
                     children: <Widget>[
-                      Stack(
-                        children: <Widget>[
-                          _buildCaroulSlider(_allMovies),
-                          Positioned(
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            child: Container(
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  Padding(
-                                    padding: const EdgeInsets.all(16),
-                                    child: _buildHeaderWidget(),
-                                  ),
-                                  _buildPlayButtonWidget()
-                                ],
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: AppConst.isTablet(context) ? 540 : 340,
+                        child: Stack(
+                          children: <Widget>[
+                            _buildCaroulSlider(_allMovies),
+                            Positioned(
+                              top: 0,
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                              child: Container(
+                                child: Column(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.all(16),
+                                      child: _buildHeaderWidget(),
+                                    ),
+                                    _buildPlayButtonWidget()
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       _buildListProduct(),
                       _buildOverviewMovie(),
@@ -194,9 +198,14 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
                     ),
                   );
                 }).toList()),
-            DotsIndicator(
-              dotsCount: listMovie.length,
-              position: indexPageIndicator.toDouble(),
+            Container(
+              width: double.infinity,
+              height: 35,
+              alignment: Alignment.center,
+              child: DotsIndicator(
+                dotsCount: listMovie.length,
+                position: indexPageIndicator.toDouble(),
+              ),
             )
           ],
         ),
@@ -296,7 +305,7 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
         Navigator.push(context, ScaleRouter(page: PlayingPage()));
       },
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 30),
+        padding: const EdgeInsets.only(bottom: 50),
         child: Container(
           width: 120,
           height: 40,
