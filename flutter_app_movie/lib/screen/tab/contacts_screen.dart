@@ -16,8 +16,8 @@ class _ContactsPageState extends State<ContactsPage> {
   }
 
   Widget _buildBody() {
-    return Container(
-      child: SafeArea(
+    return SafeArea(
+      child: Container(
         child: Column(
           children: <Widget>[
             _buildHeader(),

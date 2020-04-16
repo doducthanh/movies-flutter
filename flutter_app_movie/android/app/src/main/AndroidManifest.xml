@@ -8,6 +8,7 @@
     <application
         android:name=".MyApplication"
         android:label="flutterappmovie"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
@@ -51,4 +52,5 @@
     </application>
 
     <uses-permission android:name="android.permission.INTERNET"/>
+
 </manifest>

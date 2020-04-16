@@ -58,6 +58,11 @@ class _SearchMoviePageState extends State<SearchMoviePage> {
                       Expanded(
                         child: TextField(
                           onChanged: (string) {
+                            if ((_searchController.text == "") || (string == "")) {
+                              setState(() {
+                                listResult = [];
+                              });
+                            }
                             List<Movie> list = [];
                             widget.allMovie.forEach((e) {
                               if (e.name

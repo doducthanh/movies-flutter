@@ -33,8 +33,10 @@ class _PlayingPageState extends State<PlayingPage> {
         "http://clips.vorwaerts-gmbh.de/VfE_html5.mp4");
 
     _videoController.addListener(() {
-      _trackingObject.sink.add(_videoController.value.position);
-      setState(() {});
+      if (_videoController.value.position != null ) {
+        _trackingObject.sink.add(_videoController.value.position);
+        setState(() {});
+      }
     });
     _videoController.setLooping(true);
     _videoController.initialize().then((_) => setState(() {}));
@@ -192,6 +194,8 @@ class _PlayAndPauseState extends State<PlayAndPause> {
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
                                 widget.position = snapshot.data;
+                              } else {
+                                return SizedBox();
                               }
                               return Column(
                                 children: <Widget>[
@@ -203,7 +207,7 @@ class _PlayAndPauseState extends State<PlayAndPause> {
                                           .toDouble(),
                                       inactiveColor: Colors.white,
                                       activeColor: Colors.blueAccent,
-                                      value: snapshot.data.inSeconds.toDouble(),
+                                      value: snapshot.data.inSeconds.toDouble() ?? 0,
                                       onChanged: (newValue) {
                                         widget._controller.seekTo(Duration(
                                             seconds: newValue.toInt()));
