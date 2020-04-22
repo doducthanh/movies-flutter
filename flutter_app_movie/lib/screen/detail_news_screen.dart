@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutterappmovie/common/colors_const.dart';
+import 'package:flutterappmovie/const/colors.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class DetailNewsPage extends StatefulWidget {
@@ -23,7 +23,7 @@ class _DetailNewsPageState extends State<DetailNewsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: ColorsConst.mainColor,
+        backgroundColor: MAIN_THEME,
       ),
       body: IndexedStack(
         index: index,

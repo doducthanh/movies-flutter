@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterappmovie/common/colors_const.dart';
+import 'package:flutterappmovie/const/colors.dart';
 
 class ChatPage extends StatefulWidget {
   @override
@@ -12,7 +12,7 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: ColorsConst.mainColor,
+        backgroundColor: MAIN_THEME,
         leading: GestureDetector(
             onTap: () {
               Navigator.of(context).pop();
@@ -81,7 +81,8 @@ class _ChatPageState extends State<ChatPage> {
                       child: TextField(
                         decoration: InputDecoration(
                             hintText: "Nhập tin nhắn",
-                            enabledBorder: InputBorder.none),
+                            enabledBorder: InputBorder.none,
+                            border: InputBorder.none),
                       ),
                     ),
                   ),
@@ -147,13 +148,16 @@ class _ChatPageState extends State<ChatPage> {
                           ),
                           Expanded(
                               child: FittedBox(
-                                child: Container(
-                                  padding: EdgeInsets.fromLTRB(8, 2, 8, 2),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.rectangle,
-                                      borderRadius: BorderRadius.circular(14),
-                                      color: Colors.grey[100]),
-                                  child: Text("Hello world!! ", style: TextStyle(fontSize: 14),),
+                            child: Container(
+                              padding: EdgeInsets.fromLTRB(8, 2, 8, 2),
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.rectangle,
+                                  borderRadius: BorderRadius.circular(14),
+                                  color: Colors.grey[100]),
+                              child: Text(
+                                "Hello world!! ",
+                                style: TextStyle(fontSize: 14),
+                              ),
                             ),
                           ))
                         ],

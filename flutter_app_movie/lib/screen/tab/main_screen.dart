@@ -2,12 +2,13 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterappmovie/bloc/account_bloc.dart';
-import 'package:flutterappmovie/common/app_const.dart';
-import 'package:flutterappmovie/common/cache.dart';
+import 'package:flutterappmovie/const/appbar_const.dart';
+import 'package:flutterappmovie/const/base_bottom_bar_item.dart';
+import 'package:flutterappmovie/const/cache.dart';
+import 'package:flutterappmovie/const/colors.dart';
+import 'package:flutterappmovie/const/value.dart';
 import 'package:flutterappmovie/model/account.dart';
 import 'package:flutterappmovie/screen/tab/account_screen.dart';
-import 'package:flutterappmovie/screen/activity_screen.dart';
-import 'package:flutterappmovie/screen/detail_movie_screen.dart';
 import 'package:flutterappmovie/screen/login/login_screen.dart';
 import 'package:flutterappmovie/screen/tab/contacts_screen.dart';
 import 'package:flutterappmovie/screen/tab/news_screen.dart';
@@ -15,8 +16,6 @@ import 'package:flutterappmovie/screen/playing_screen.dart';
 import 'package:flutterappmovie/screen/tab/videos_screen.dart';
 import 'package:flutterappmovie/utility/notification.dart';
 
-import '../../common/base_bottom_bar_item.dart';
-import '../../common/colors_const.dart';
 import 'home_screen.dart';
 
 class MainPage extends StatefulWidget {
@@ -31,14 +30,14 @@ class MainPage extends StatefulWidget {
 
 class MainPageState extends State<MainPage> {
   var _listBottomBar = [
-    MovieBottomBarItem.init(AppConst.homeBarTitle, Icon(Icons.home)),
-    MovieBottomBarItem.init(AppConst.videoBarTitle, Icon(Icons.video_library)),
+    MovieBottomBarItem.init(AppBarConst.homeBarTitle, Icon(Icons.home)),
+    MovieBottomBarItem.init(AppBarConst.videoBarTitle, Icon(Icons.video_library)),
     MovieBottomBarItem.init(
-        AppConst.activityBarTitle, Icon(Icons.notifications_active)),
+        AppBarConst.activityBarTitle, Icon(Icons.notifications_active)),
     MovieBottomBarItem.init(
-        AppConst.contactBarTitle, Icon(Icons.perm_contact_calendar)),
+        AppBarConst.contactBarTitle, Icon(Icons.perm_contact_calendar)),
     MovieBottomBarItem.init(
-        AppConst.accountBarTitle, Icon(Icons.account_circle)),
+        AppBarConst.accountBarTitle, Icon(Icons.account_circle)),
   ];
 
   int _currentSelected = 0;
@@ -93,7 +92,7 @@ class MainPageState extends State<MainPage> {
       duration: Duration(milliseconds: 400),
       content: Text(
         text,
-        style: TextStyle(color: Colors.green, fontSize: 14),
+        style: TextStyle(color: Colors.green, fontSize: TEXT_M),
       ),
     ));
   }
@@ -123,10 +122,10 @@ class MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorsConst.mainColor,
+      backgroundColor: MAIN_THEME,
       bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
-          backgroundColor: ColorsConst.mainColor,
+          backgroundColor: MAIN_THEME,
           unselectedItemColor: Colors.white,
           selectedItemColor: Colors.yellow,
           onTap: _selectedBottomBar,

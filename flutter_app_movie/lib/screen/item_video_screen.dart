@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterappmovie/common/image_path_const.dart';
+import 'package:flutterappmovie/const/image.dart';
 import 'package:flutterappmovie/screen/chewie_list_item.dart';
 import 'package:flutterappmovie/screen/playing_screen.dart';
 import 'package:video_player/video_player.dart';
@@ -141,7 +141,7 @@ class _ItemVideoState extends State<ItemVideo> {
                         fontWeight: FontWeight.bold,
                         fontSize: 12)),
                 Image.asset(
-                  ImagePathConst.icSetting,
+                  ImagePath.icSetting,
                   width: 18,
                   height: 18,
                 )

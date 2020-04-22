@@ -3,15 +3,14 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterappmovie/bloc/movies_bloc.dart';
-import 'package:flutterappmovie/common/app_const.dart';
-import 'package:flutterappmovie/common/base_router.dart';
-import 'package:flutterappmovie/common/cache.dart';
-import 'package:flutterappmovie/common/colors_const.dart';
-import 'package:flutterappmovie/common/image_path_const.dart';
-import 'package:flutterappmovie/common/value_const.dart';
+import 'package:flutterappmovie/const/appbar_const.dart';
+import 'package:flutterappmovie/const/base_router.dart';
+import 'package:flutterappmovie/const/cache.dart';
+import 'package:flutterappmovie/const/colors.dart';
+import 'package:flutterappmovie/const/image.dart';
+import 'package:flutterappmovie/const/value.dart';
 import 'package:flutterappmovie/model/movie.dart';
 import 'package:flutterappmovie/screen/playing_screen.dart';
-import 'package:flutterappmovie/utility/app_utility.dart';
 import 'package:video_player/video_player.dart';
 import 'login/login_screen.dart';
 
@@ -81,14 +80,14 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: ColorsConst.mainColor, body: _buildBodyWidget());
+        backgroundColor: MAIN_THEME, body: _buildBodyWidget());
   }
 
   Widget _buildBodyWidget() {
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
-      color: ColorsConst.mainColor,
+      color: MAIN_THEME,
       child: SingleChildScrollView(
         controller: _scrollController,
         child: Column(
@@ -102,7 +101,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
   }
 
   Widget _buildHeaderWidget() {
-    scale = AppConst.isTablet(context) ? 1.2 : 1.0;
+    scale = AppBarConst.isTablet(context) ? 1.2 : 1.0;
     return Container(
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -184,9 +183,9 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
             height: 30,
             padding: EdgeInsets.all(5.0),
             decoration: BoxDecoration(
-                shape: BoxShape.circle, color: ColorsConst.mainColor),
+                shape: BoxShape.circle, color: MAIN_THEME),
             child: Image.asset(
-              ImagePathConst.icCloseWhite,
+              ImagePath.icCloseWhite,
             ),
           ),
         ),
@@ -195,7 +194,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
   }
 
   Widget _buildImageAndNameMovie() {
-    scale = AppConst.isTablet(context) ? 1.2 : 1.0;
+    scale = AppBarConst.isTablet(context) ? 1.2 : 1.0;
     return Column(
       children: <Widget>[
         TweenAnimationBuilder(
@@ -267,7 +266,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Image.asset(
-              ImagePathConst.icPlayWhite,
+              ImagePath.icPlayWhite,
               width: 24,
               height: 24,
             ),
@@ -406,13 +405,13 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
                       ? Padding(
                           padding: const EdgeInsets.all(3.0),
                           child: Image.asset(
-                            ImagePathConst.icFavouriteRed,
+                            ImagePath.icFavouriteRed,
                           ),
                         )
                       : Padding(
                           padding: const EdgeInsets.all(5.0),
                           child: Image.asset(
-                            ImagePathConst.icFavouriteGray,
+                            ImagePath.icFavouriteGray,
                           ),
                         ),
                 ),
@@ -441,7 +440,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
                   child: Padding(
                     padding: const EdgeInsets.all(6.0),
                     child: Image.asset(
-                      ImagePathConst.icCommentGray,
+                      ImagePath.icCommentGray,
                     ),
                   ),
                 ),
@@ -470,7 +469,7 @@ class _DetailMoviePageState extends State<DetailMoviePage> {
                   child: Padding(
                     padding: const EdgeInsets.all(6.0),
                     child: Image.asset(
-                      ImagePathConst.icShareGray,
+                      ImagePath.icShareGray,
                     ),
                   ),
                 ),

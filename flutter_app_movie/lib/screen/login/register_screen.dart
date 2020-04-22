@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:flutterappmovie/bloc/account_bloc.dart';
-import 'package:flutterappmovie/common/colors_const.dart';
-import 'package:flutterappmovie/common/image_path_const.dart';
+import 'package:flutterappmovie/const/colors.dart';
+import 'package:flutterappmovie/const/image.dart';
 import 'package:flutterappmovie/screen/login/login_screen.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -17,12 +17,13 @@ class _RegisterPageState extends State<RegisterPage> {
   var _usernameController = TextEditingController();
   var _passController = TextEditingController();
   var _emailController = TextEditingController();
+  var isHiddenPass = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: ColorsConst.mainColor,
+        backgroundColor: MAIN_THEME,
         title: Text('Đăng ký'),
         leading: FlatButton(
           child: IconButton(icon: Icon(Icons.arrow_back_ios, color: Colors.white,),),
@@ -48,7 +49,7 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Container(
           child: Column(
             children: <Widget>[
-              Image(image: AssetImage(ImagePathConst.imgLogo),height: 250, fit: BoxFit.fitWidth,),
+              Image(image: AssetImage(ImagePath.imgLogo),height: 250, fit: BoxFit.fitWidth,),
               _buildUserNameForm(),
               SizedBox(height: 16),
               _buildPassForm(),
@@ -99,13 +100,21 @@ class _RegisterPageState extends State<RegisterPage> {
           builder: (context, snapshot) {
             var textError = (snapshot.hasData) ? snapshot.data : null;
             return TextField(
-              obscureText: true,
+              obscureText: isHiddenPass,
               controller: _passController,
               onTap: _accountBloc.resetPasswordTextField,
               cursorRadius: Radius.circular(12),
               decoration: InputDecoration(
                 hintText: 'Password',
                 prefixIcon: Icon(Icons.lock),
+                suffixIcon: IconButton(
+                  onPressed: (){
+                    setState(() {
+                      isHiddenPass = !isHiddenPass;
+                    });
+                  },
+                  icon: isHiddenPass ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
+                ),
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12)
                 ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutterappmovie/screen/chat/chat_screen.dart';
+import 'package:flutterappmovie/screen/chat/overview_chat.dart';
 
 class ContactsPage extends StatefulWidget {
   @override
@@ -73,7 +74,7 @@ class _ContactsPageState extends State<ContactsPage> {
   Widget _buildList() {
     return Expanded(
       child: Container(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.fromLTRB(16, 0, 16, 10),
         child: ListView.builder(
             shrinkWrap: true,
             itemCount: 3,
@@ -81,11 +82,12 @@ class _ContactsPageState extends State<ContactsPage> {
               return GestureDetector(
                 onTap: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ChatPage()));
+                      MaterialPageRoute(builder: (context) => OverviewChatPage()));
                 },
                 child: Container(
                   margin: EdgeInsets.only(bottom: 20),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.max,
                     children: <Widget>[
                       Container(

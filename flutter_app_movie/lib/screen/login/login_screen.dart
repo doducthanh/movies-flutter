@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:flutterappmovie/bloc/account_bloc.dart';
-import 'package:flutterappmovie/common/cache.dart';
-import 'package:flutterappmovie/common/colors_const.dart';
-import 'package:flutterappmovie/common/image_path_const.dart';
+import 'package:flutterappmovie/const/cache.dart';
+import 'package:flutterappmovie/const/colors.dart';
+import 'package:flutterappmovie/const/image.dart';
 import 'package:flutterappmovie/screen/login/register_screen.dart';
 import 'package:flutterappmovie/screen/tab/main_screen.dart';
 import 'package:flutterappmovie/utility/app_utility.dart';
@@ -25,6 +25,7 @@ class _LoginPageState extends State<LoginPage> {
   var _passwordController = TextEditingController();
   var isLoading = false;
   var focusNode = FocusNode();
+  var isHidePass = true;
 
   @override
   void initState() {
@@ -50,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: ColorsConst.mainColor,
+        backgroundColor: MAIN_THEME,
         title: Text('Đăng nhập'),
         leading: FlatButton(
           child: IconButton(
@@ -81,7 +82,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             children: <Widget>[
               Image(
-                image: AssetImage(ImagePathConst.imgLogo),
+                image: AssetImage(ImagePath.imgLogo),
                 height: 250,
                 fit: BoxFit.fitWidth,
               ),
@@ -129,13 +130,22 @@ class _LoginPageState extends State<LoginPage> {
           builder: (context, snapshot) {
             var textError = (snapshot.hasData) ? snapshot.data : null;
             return TextField(
-              obscureText: true,
+              obscureText: isHidePass,
               onTap: _accountBloc.resetPasswordTextField,
               controller: _passwordController,
               cursorRadius: Radius.circular(12),
               decoration: InputDecoration(
                   hintText: 'Password',
                   prefixIcon: Icon(Icons.lock),
+                  suffixIcon: IconButton(
+                    onPressed: (){
+                      setState(() {
+                        isHidePass = !isHidePass;
+                      });
+                    },
+                    iconSize: 24,
+                    icon: isHidePass ? Icon(Icons.visibility_off) : Icon(Icons.visibility),
+                  ),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)),
                   errorText: textError),

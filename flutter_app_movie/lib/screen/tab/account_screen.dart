@@ -1,6 +1,7 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterappmovie/screen/animation_example_screen.dart';
 
 import '../playing_screen.dart';
 
@@ -107,7 +108,10 @@ class _AccountPageState extends State<AccountPage> {
                 ),
 
                 RaisedButton(
-                  child: Text("Push Notification"),
+                  child: Text("Animation", style: TextStyle(color: Colors.white),),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => AnimationPage()));
+                  },
                 )
                 // Text("Message: $message")
               ]),

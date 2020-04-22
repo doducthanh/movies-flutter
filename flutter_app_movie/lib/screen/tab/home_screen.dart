@@ -6,21 +6,21 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterappmovie/bloc/actors_bloc.dart';
 import 'package:flutterappmovie/bloc/movies_bloc.dart';
-import 'package:flutterappmovie/common/app_const.dart';
-import 'package:flutterappmovie/common/base_router.dart';
-import 'package:flutterappmovie/common/cache.dart';
-import 'package:flutterappmovie/common/value_const.dart';
+import 'package:flutterappmovie/const/appbar_const.dart';
+import 'package:flutterappmovie/const/base_router.dart';
+import 'package:flutterappmovie/const/cache.dart';
+import 'package:flutterappmovie/const/value.dart';
 import 'package:flutterappmovie/model/account.dart';
 import 'package:flutterappmovie/model/actor.dart';
 import 'package:flutterappmovie/model/movie.dart';
-import 'package:flutterappmovie/module_example/dartboard_list_tutorial.dart';
 import 'package:flutterappmovie/screen/detail_movie_screen.dart';
 import 'package:flutterappmovie/screen/playing_screen.dart';
+import 'package:flutterappmovie/screen/purchase_screen.dart';
 import 'package:flutterappmovie/screen/search_movie_screen.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../../common/colors_const.dart';
-import '../../common/image_path_const.dart';
+import '../../const/colors.dart';
+import '../../const/image.dart';
 
 class HomePage extends StatefulWidget {
   final Account account;
@@ -61,14 +61,14 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
       duration: Duration(milliseconds: 400),
       content: Text(
         'Tính năng đang phát triển',
-        style: TextStyle(color: Colors.green, fontSize: 14),
+        style: TextStyle(color: Colors.green, fontSize: TEXT_M),
       ),
     ));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(backgroundColor: ColorsConst.mainColor, body: _buildBody());
+    return Scaffold(backgroundColor: MAIN_THEME, body: _buildBody());
   }
 
   Widget _buildBody() {
@@ -92,7 +92,7 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
                     children: <Widget>[
                       Container(
                         width: MediaQuery.of(context).size.width,
-                        height: AppConst.isTablet(context) ? 540 : 340,
+                        height: AppBarConst.isTablet(context) ? 540 : 340,
                         child: Stack(
                           children: <Widget>[
                             _buildCaroulSlider(_allMovies),
@@ -108,7 +108,7 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
                                   mainAxisSize: MainAxisSize.max,
                                   children: <Widget>[
                                     Padding(
-                                      padding: const EdgeInsets.all(16),
+                                      padding: const EdgeInsets.all(PADDING_XXXL),
                                       child: _buildHeaderWidget(),
                                     ),
                                     _buildPlayButtonWidget()
@@ -152,14 +152,14 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   ///
   Widget _buildCaroulSlider(List<Movie> listMovie) {
     if (listMovie.length == 0) {
-      return _buildLoadingWidget(AppConst.isTablet(context) ? 500 : 300);
+      return _buildLoadingWidget(AppBarConst.isTablet(context) ? 500 : 300);
     } else {
       return Container(
         width: MediaQuery.of(context).size.width,
         child: Column(
           children: <Widget>[
             CarouselSlider(
-                height: AppConst.isTablet(context) ? 500 : 300,
+                height: AppBarConst.isTablet(context) ? 500 : 300,
                 autoPlay: true,
                 viewportFraction: 1.0,
                 aspectRatio: 2.0,
@@ -245,10 +245,10 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
                         padding: EdgeInsets.all(6),
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: ColorsConst.mainColor),
+                            color: MAIN_THEME),
                         child: Center(
                             child: Image.asset(
-                              ImagePathConst.icSearchGray,
+                              ImagePath.icSearchGray,
                               width: 24,
                               height: 24,
                             )),
@@ -266,22 +266,26 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
                         padding: EdgeInsets.all(6),
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: ColorsConst.mainColor),
+                            color: MAIN_THEME),
                         child: (isFavourite)
                             ? Image.asset(
-                          ImagePathConst.icFavouriteRed,
+                          ImagePath.icFavouriteRed,
                           width: 24,
                           height: 24,
                         )
                             : Image.asset(
-                          ImagePathConst.icFavouriteGray,
+                          ImagePath.icFavouriteGray,
                           width: 24,
                           height: 24,
                         )),
                   ),
                 ),
                 RaisedButton(
-                  onPressed: _showDialog,
+                  onPressed: (){
+                    Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => PurchasePage())
+                    );
+                  },
                   disabledColor: Colors.orange,
                   color: Colors.orange,
                   shape: RoundedRectangleBorder(
@@ -318,7 +322,7 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Image.asset(
-                  ImagePathConst.icPlayWhite,
+                  ImagePath.icPlayWhite,
                   width: 28,
                   height: 28,
                 ),
@@ -342,7 +346,7 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   Widget _buildListProduct() {
     return Padding(
       padding: EdgeInsets.fromLTRB(
-          PaddingConst.defaultPadding, 12, PaddingConst.defaultPadding, 0),
+          PADDING_XXL, PADDING_XXL, PADDING_XXL, 0),
       child: Column(
         children: <Widget>[
           Align(
@@ -361,12 +365,12 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
               padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
               scrollDirection: Axis.horizontal,
               children: <Widget>[
-                _buildProductSunshine('SunShine', ImagePathConst.imgProduct1),
-                _buildProductSunshine('SunShine', ImagePathConst.imgProduct2),
-                _buildProductSunshine('SunShine', ImagePathConst.imgProduct3),
-                _buildProductSunshine('SunShine', ImagePathConst.imgProduct1),
-                _buildProductSunshine('SunShine', ImagePathConst.imgProduct2),
-                _buildProductSunshine('SunShine', ImagePathConst.imgProduct3),
+                _buildProductSunshine('SunShine', ImagePath.imgProduct1),
+                _buildProductSunshine('SunShine', ImagePath.imgProduct2),
+                _buildProductSunshine('SunShine', ImagePath.imgProduct3),
+                _buildProductSunshine('SunShine', ImagePath.imgProduct1),
+                _buildProductSunshine('SunShine', ImagePath.imgProduct2),
+                _buildProductSunshine('SunShine', ImagePath.imgProduct3),
               ],
             ),
           ),
@@ -377,7 +381,7 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
 
   ///ve templet cho 1 sp
   Widget _buildProductSunshine(String overview, String imgPath) {
-    double scale = AppConst.isTablet(context) ? 1.5 : 1.0;
+    double scale = AppBarConst.isTablet(context) ? 1.5 : 1.0;
     return GestureDetector(
       onTap: () {
 //        Navigator.push(
@@ -444,7 +448,7 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
         height: 200,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(ImagePathConst.imgPosterDemo),
+            image: AssetImage(ImagePath.imgPosterDemo),
           ),
         ),
         child: Padding(
@@ -533,7 +537,7 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   }
 
   Widget _buildTempleMovie(String imgPath, String title) {
-    var scale = AppConst.isTablet(context) ? 1.2 : 1.0;
+    var scale = AppBarConst.isTablet(context) ? 1.2 : 1.0;
     return Container(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(4, 0, 4, 0),
@@ -565,7 +569,7 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   }
 
   Widget _buildListActors(List<Actor> listActor) {
-    var scale = AppConst.isTablet(context) ? 1.5 : 1.0;
+    var scale = AppBarConst.isTablet(context) ? 1.5 : 1.0;
     return Container(
       height: 150,
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),

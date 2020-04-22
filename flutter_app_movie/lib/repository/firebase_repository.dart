@@ -6,54 +6,12 @@ import 'package:flutterappmovie/model/movie.dart';
 import 'package:flutterappmovie/model/news.dart';
 import 'dart:convert';
 
-import 'package:flutterappmovie/utility/app_utility.dart';
-
 /// class chua cac phuong thuc chung de thao tac du lieu tu firebase
-
 class FirebaseRepository {
   final _collection = "movies";
 
   final _database = Firestore.instance;
   final _firebaseAuth = FirebaseAuth.instance;
-
-  List<Movie> _allMovies = [
-    Movie(
-        id: '',
-        name: 'BloodShot',
-        duration: 0,
-        image:
-            'https://www.cgv.vn/media/catalog/product/cache/1/small_image/240x388/dd828b13b1cb77667d034d5f59a82eb6/b/l/bloodshot_cgv_1.jpg'),
-    Movie(
-        id: '',
-        name: 'Vì anh vẫn tin',
-        duration: 0,
-        image:
-            'https://www.cgv.vn/media/catalog/product/cache/1/small_image/240x388/dd828b13b1cb77667d034d5f59a82eb6/i/-/i-still-believe-1-poster-cgv_1.jpg'),
-    Movie(
-        id: '',
-        name: 'Truy tìm phép thuật',
-        duration: 0,
-        image:
-            'https://www.cgv.vn/media/catalog/product/cache/1/small_image/240x388/dd828b13b1cb77667d034d5f59a82eb6/p/o/poster_onward_official_1__1.jpg'),
-    Movie(
-        id: '',
-        name: 'Lời hứa của cha',
-        duration: 0,
-        image:
-            'https://www.cgv.vn/media/catalog/product/cache/1/small_image/240x388/dd828b13b1cb77667d034d5f59a82eb6/n/a/nang3-1-poster-scaled-cgv_1.jpg'),
-    Movie(
-        id: '',
-        name: 'Căn hộ của quỷ',
-        duration: 0,
-        image:
-            'https://www.cgv.vn/media/catalog/product/cache/1/small_image/240x388/dd828b13b1cb77667d034d5f59a82eb6/p/o/poster_payoff_-_malasana_cgv_1.jpg'),
-    Movie(
-        id: '',
-        name: 'Loạn nhịp',
-        duration: 0,
-        image:
-            'https://www.cgv.vn/media/catalog/product/cache/1/small_image/240x388/dd828b13b1cb77667d034d5f59a82eb6/l/o/loan-nhip_1.png')
-  ];
 
   ///login && logout with FirebaseAutho
   Future<String> signIn(String email, String password) async {
@@ -95,7 +53,6 @@ class FirebaseRepository {
     } catch(e) {
       return false;
     }
-
   }
 
   ///lấy danh sách phim
@@ -120,7 +77,6 @@ class FirebaseRepository {
   }
 
   Future<bool> addUser(String id, String userName, String pass, String email) async {
-    var encodePass = utf8.encode(pass);
     try {
       await _database.collection("account").document(id).setData({
         'username': userName,

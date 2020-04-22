@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutterappmovie/common/app_const.dart';
-import 'package:flutterappmovie/common/cache.dart';
+import 'package:flutterappmovie/const/appbar_const.dart';
+import 'package:flutterappmovie/const/cache.dart';
 
 enum Device {
   mobile, ipadTablet

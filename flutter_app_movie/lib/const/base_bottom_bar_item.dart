@@ -8,5 +8,4 @@ class MovieBottomBarItem extends BottomNavigationBarItem {
       title: Text(title, style: TextStyle(fontSize: 12),),
     );
   }
-
 }

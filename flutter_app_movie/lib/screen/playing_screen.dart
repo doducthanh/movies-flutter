@@ -1,7 +1,7 @@
 import 'package:chewie/chewie.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterappmovie/common/image_path_const.dart';
+import 'package:flutterappmovie/const/image.dart';
 import 'package:flutterappmovie/utility/app_utility.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:video_player/video_player.dart';
@@ -147,7 +147,7 @@ class _PlayAndPauseState extends State<PlayAndPause> {
                               });
                             },
                             child: Image.asset(
-                              ImagePathConst.icSkipBack,
+                              ImagePath.icSkipBack,
                               width: 30,
                               height: 30,
                             ),
@@ -182,7 +182,7 @@ class _PlayAndPauseState extends State<PlayAndPause> {
                               });
                             },
                             child: Image.asset(
-                              ImagePathConst.icSkipNext,
+                              ImagePath.icSkipNext,
                               width: 30,
                               height: 30,
                             ),

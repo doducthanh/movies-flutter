@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterappmovie/bloc/news_bloc.dart';
-import 'package:flutterappmovie/common/colors_const.dart';
+import 'package:flutterappmovie/const/colors.dart';
 import 'package:flutterappmovie/model/news.dart';
 import 'package:flutterappmovie/screen/detail_news_screen.dart';
 
@@ -25,7 +25,7 @@ class _NewsPageState extends State<NewsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: ColorsConst.mainColor,
+        backgroundColor: MAIN_THEME,
           title: Text(
         "Tin tức SunShine",
         style: TextStyle(
