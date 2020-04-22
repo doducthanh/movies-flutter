@@ -41,6 +41,7 @@ dependencies:
   cached_network_image: ^2.0.0
   firebase_messaging: ^6.0.13
   flutter_local_notifications: ^1.4.1
+  animator: ^1.0.0+5
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutterappmovie/screen/chat/chat_screen.dart';
@@ -82,7 +83,7 @@ class _ContactsPageState extends State<ContactsPage> {
               return GestureDetector(
                 onTap: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => OverviewChatPage()));
+                      CupertinoPageRoute(builder: (context) => OverviewChatPage()));
                 },
                 child: Container(
                   margin: EdgeInsets.only(bottom: 20),

@@ -12,6 +12,10 @@ class ImagePath {
   static const String imgMinato = "assets/images/image_minato.jpg";
   static const String imgSasuke = "assets/images/image_sasuke.jpg";
   static const String imgItachi = "assets/images/image_itachi.jpg";
+  static const String imgBoruto = "assets/images/image_boruto.jpg";
+  static const String imgHimawari = "assets/images/image_himawari.jpg";
+  static const String imgKushina = "assets/images/image_kushina.jpg";
+  static const String imgRin = "assets/images/image_rin.jpg";
 
   ///icon
   static const String icFavouriteRed = "assets/icons/ic_favourite_red.png";

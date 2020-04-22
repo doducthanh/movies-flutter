@@ -1,6 +1,9 @@
+import 'package:animator/animator.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterappmovie/model/message.dart';
 import 'package:flutterappmovie/model/user.dart';
+import 'package:flutterappmovie/screen/chat/chat_screen.dart';
 
 class OverviewChatPage extends StatefulWidget {
   @override
@@ -41,8 +44,17 @@ class _OverviewChatPageState extends State<OverviewChatPage> {
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30),
                       topRight: Radius.circular(30)),
-                  color: Colors.orangeAccent[100]),
-              child: FavouriteContacts(favourite),
+                  color: Colors.white),
+              child: Column(
+                children: <Widget>[
+                  FavouriteContacts(favourite),
+                  Expanded(
+                    child: ListChat(
+                      messages: chats,
+                    ),
+                  )
+                ],
+              ),
             ),
           )
         ],
@@ -102,28 +114,181 @@ class FavouriteContacts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.all(16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                "Favourite Contacts",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                    color: Colors.black87),
-              ),
-              IconButton(
-                icon: Icon(Icons.more_horiz),
-              )
-            ],
+    return Container(
+      padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
+      child: Column(
+        children: <Widget>[
+          Container(
+            height: 30,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  "Favourite Contacts",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.black87),
+                ),
+                IconButton(
+                  icon: Icon(Icons.more_horiz),
+                )
+              ],
+            ),
           ),
-        )
-      ],
+          Container(
+            padding: EdgeInsets.only(top: 4),
+            height: 110,
+            alignment: Alignment.topLeft,
+            child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                itemCount: favourites.length,
+                itemBuilder: (context, index) {
+                  return Animator(
+                    tween:
+                        Tween<Offset>(begin: Offset(3, 0), end: Offset(0, 0)),
+                    duration: Duration(milliseconds: 800),
+                    builder: (anim) => FractionalTranslation(
+                      translation: anim.value,
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        child: Column(
+                          children: <Widget>[
+                            CircleAvatar(
+                              backgroundImage:
+                                  AssetImage(favourites[index].imageUrl),
+                              radius: 30,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4),
+                              child: Text(
+                                favourites[index].name,
+                                style: TextStyle(
+                                    color: Colors.black54,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+          )
+        ],
+      ),
     );
   }
 }
 
+class ListChat extends StatefulWidget {
+  List<Message> messages;
+
+  ListChat({this.messages});
+
+  @override
+  _ListChatState createState() => _ListChatState();
+}
+
+class _ListChatState extends State<ListChat> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
+      child: ListView.builder(
+          shrinkWrap: true,
+          scrollDirection: Axis.vertical,
+          itemCount: widget.messages.length,
+          itemBuilder: (BuildContext context, index) {
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ChatPage()));
+              },
+              child: Animator(
+                tween: Tween<Offset>(begin: Offset(0, 3), end: Offset(0, 0)),
+                duration: Duration(milliseconds: 700),
+                builder: (anim) => FractionalTranslation(
+                  translation: anim.value,
+                  child: Container(
+                    padding: EdgeInsets.only(bottom: 14),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        CircleAvatar(
+                          backgroundImage:
+                          AssetImage(widget.messages[index].sender.imageUrl),
+                          radius: 35,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 0, right: 16),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(widget.messages[index].sender.name),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                widget.messages[index].text,
+                                overflow: TextOverflow.ellipsis,
+                              )
+                            ],
+                          ),
+                        ),
+                        Container(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(widget.messages[index].time),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              widget.messages[index].unread
+                                  ? Animator(
+                                curve: Curves.bounceInOut,
+                                tween: Tween<double>(begin: 0, end: 1),
+                                duration: Duration(milliseconds: 1000),
+                                builder: (anim) => Transform.scale(
+                                    scale: anim.value,
+                                    child: Container(
+                                      width: 60,
+                                      height: 30,
+                                      child: Center(
+                                          child: Text(
+                                            "New",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          )),
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.rectangle,
+                                          borderRadius:
+                                          BorderRadius.circular(15),
+                                          color: Colors.red),
+                                    )),
+                              )
+                                  : SizedBox(
+                                height: 40,
+                              )
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+
+              ),
+            );
+          }),
+    );
+  }
+}

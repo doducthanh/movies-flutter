@@ -6,6 +6,10 @@ final User sasuke = User(1, "Sasuke", ImagePath.imgSasuke);
 final User hinata = User(2, "Hinata", ImagePath.imgHinata);
 final User minato = User(3, "Minato", ImagePath.imgMinato);
 final User itachi = User(4, "Itachi", ImagePath.imgItachi);
+final User boruto = User(5, "Boruto", ImagePath.imgBoruto);
+final User himwari = User(6, "Himawari", ImagePath.imgHimawari);
+final User kushina = User(7, "Kushina", ImagePath.imgKushina);
+final User rin = User(8, "Rin", ImagePath.imgRin);
 
 class Message {
   final User sender;
@@ -18,7 +22,7 @@ class Message {
 
 }
 
-final List<User> favourite = [hinata, sasuke, minato];
+final List<User> favourite = [hinata, sasuke, minato, himwari, boruto];
 
 List<Message> chats = [
   Message(
@@ -33,7 +37,7 @@ List<Message> chats = [
       time: "15:30 PM",
       text: "Hey, what did you do today?",
       isLiked: true,
-      unread: true
+      unread: false
   ),
   Message(
       sender: minato,
@@ -44,6 +48,38 @@ List<Message> chats = [
   ),
   Message(
       sender: itachi,
+      time: "5:20 PM",
+      text: "Hey, what did you do today?",
+      isLiked: false,
+      unread: false
+  ),
+
+  Message(
+      sender: boruto,
+      time: "5:20 PM",
+      text: "Hey, what did you do today?",
+      isLiked: false,
+      unread: true
+  ),
+
+  Message(
+      sender: himwari,
+      time: "5:20 PM",
+      text: "Hey, what did you do today?",
+      isLiked: false,
+      unread: false
+  ),
+
+  Message(
+      sender: kushina,
+      time: "5:20 PM",
+      text: "Hey, what did you do today?",
+      isLiked: false,
+      unread: false
+  ),
+
+  Message(
+      sender: rin,
       time: "5:20 PM",
       text: "Hey, what did you do today?",
       isLiked: false,
