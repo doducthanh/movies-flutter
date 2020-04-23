@@ -80,14 +80,18 @@ class _ContactsPageState extends State<ContactsPage> {
             shrinkWrap: true,
             itemCount: 3,
             itemBuilder: (context, index) {
-              return GestureDetector(
+              return InkWell(
+
+                highlightColor: Colors.grey.withOpacity(0.5),
                 onTap: () {
                   Navigator.push(context,
                       CupertinoPageRoute(builder: (context) => OverviewChatPage()));
                 },
                 child: Container(
+                  alignment: Alignment.center,
                   margin: EdgeInsets.only(bottom: 20),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.max,
                     children: <Widget>[

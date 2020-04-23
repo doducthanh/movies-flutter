@@ -18,6 +18,7 @@ import 'package:flutterappmovie/screen/playing_screen.dart';
 import 'package:flutterappmovie/screen/purchase_screen.dart';
 import 'package:flutterappmovie/screen/search_movie_screen.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../const/colors.dart';
 import '../../const/image.dart';
@@ -291,10 +292,10 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
                   shape: RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(18.0),
                   ),
-                  child: Text('Mua gói',
+                  child: Text('Buy',
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: SizeTextConst.textDescripton)),
+                          fontSize: SizeTextConst.textDescripton)).tr(context: context),
                 )
               ],
             ),
@@ -330,10 +331,10 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
                   width: 4,
                 ),
                 Text(
-                  'Phát',
+                  'Play',
                   style: TextStyle(
                       color: Colors.white, fontSize: SizeTextConst.textTitle),
-                )
+                ).tr(context: context)
               ],
             ),
           ),
@@ -497,12 +498,12 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
           Align(
               alignment: Alignment.topLeft,
               child: Text(
-                'Tất cả',
+                'All Movie',
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: SizeTextConst.textTitle,
                     fontWeight: FontWeight.bold),
-              )),
+              ).tr(context: context)),
           SizedBox(
             height: 6,
           ),
@@ -582,12 +583,12 @@ class HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
           Align(
               alignment: Alignment.topLeft,
               child: Text(
-                'Top diễn viên hành động',
+                'Top Actor',
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: SizeTextConst.textTitle,
                     fontWeight: FontWeight.bold),
-              )),
+              ).tr(context: context)),
           (listActor.length == 0)
               ? Container(
                   height: 80 * scale,

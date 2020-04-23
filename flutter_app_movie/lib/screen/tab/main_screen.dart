@@ -1,4 +1,5 @@
 import 'package:bot_toast/bot_toast.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterappmovie/bloc/account_bloc.dart';
@@ -30,14 +31,14 @@ class MainPage extends StatefulWidget {
 
 class MainPageState extends State<MainPage> {
   var _listBottomBar = [
-    MovieBottomBarItem.init(AppBarConst.homeBarTitle, Icon(Icons.home)),
-    MovieBottomBarItem.init(AppBarConst.videoBarTitle, Icon(Icons.video_library)),
+    MovieBottomBarItem.init(tr(AppBarConst.homeBarTitle), Icon(Icons.home)),
+    MovieBottomBarItem.init(tr(AppBarConst.videoBarTitle), Icon(Icons.video_library)),
     MovieBottomBarItem.init(
-        AppBarConst.activityBarTitle, Icon(Icons.notifications_active)),
+        tr(AppBarConst.activityBarTitle), Icon(Icons.notifications_active)),
     MovieBottomBarItem.init(
-        AppBarConst.contactBarTitle, Icon(Icons.perm_contact_calendar)),
+        tr(AppBarConst.contactBarTitle), Icon(Icons.perm_contact_calendar)),
     MovieBottomBarItem.init(
-        AppBarConst.accountBarTitle, Icon(Icons.account_circle)),
+        tr(AppBarConst.accountBarTitle), Icon(Icons.account_circle)),
   ];
 
   int _currentSelected = 0;
@@ -121,6 +122,7 @@ class MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    print(tr("title"));
     return Scaffold(
       backgroundColor: MAIN_THEME,
       bottomNavigationBar: BottomNavigationBar(

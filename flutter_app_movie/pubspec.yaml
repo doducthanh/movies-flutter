@@ -42,6 +42,7 @@ dependencies:
   firebase_messaging: ^6.0.13
   flutter_local_notifications: ^1.4.1
   animator: ^1.0.0+5
+  easy_localization: ^2.1.0+2
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +69,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/videos/
+    - assets/languages/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

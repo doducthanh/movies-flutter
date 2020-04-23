@@ -1,7 +1,11 @@
 import 'package:bot_toast/bot_toast.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterappmovie/bloc/language_bloc.dart';
+import 'package:flutterappmovie/const/cache.dart';
 import 'package:flutterappmovie/screen/animation_example_screen.dart';
+import 'package:flutterappmovie/screen/change_language_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../playing_screen.dart';
 
@@ -42,9 +46,11 @@ class _AccountPageState extends State<AccountPage> {
     // TODO: implement initState
     super.initState();
     getMessage();
+
   }
 
-  static Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) {
+  static Future<dynamic> myBackgroundMessageHandler(
+      Map<String, dynamic> message) {
     if (message.containsKey('data')) {
       // Handle data message
       final dynamic data = message['data'];
@@ -58,22 +64,24 @@ class _AccountPageState extends State<AccountPage> {
     print("callback notification click");
   }
 
-  void getMessage(){
+  void getMessage() {
     _firebaseMessaging.configure(
         onMessage: (Map<String, dynamic> message) async {
           print('on message $message');
           BotToast.showSimpleNotification(title: message.toString());
           setState(() => _message = message.toString());
-        }, onResume: (Map<String, dynamic> message) async {
-      print('on resume $message');
-      setState(() => _message = message.toString());
-    }, onLaunch: (Map<String, dynamic> message) async {
-      print('on launch $message');
-      BotToast.showSimpleNotification(title: _message, duration: Duration(seconds: 5));
-      setState(() => _message = message.toString());
-    },
-     onBackgroundMessage: myBackgroundMessageHandler
-    );
+        },
+        onResume: (Map<String, dynamic> message) async {
+          print('on resume $message');
+          setState(() => _message = message.toString());
+        },
+        onLaunch: (Map<String, dynamic> message) async {
+          print('on launch $message');
+          BotToast.showSimpleNotification(
+              title: _message, duration: Duration(seconds: 5));
+          setState(() => _message = message.toString());
+        },
+        onBackgroundMessage: myBackgroundMessageHandler);
 
     _firebaseMessaging.requestNotificationPermissions(
         const IosNotificationSettings(sound: true, badge: true, alert: true));
@@ -97,21 +105,64 @@ class _AccountPageState extends State<AccountPage> {
       home: Scaffold(
         body: Center(
           child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Text("Message: $_message"),
-                OutlineButton(
-                  child: Text("Register My Device"),
-                  onPressed: () {
-                    _register();
-                  },
+                Container(
+                  height: 300,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(60), bottomRight: Radius.circular(60)),
+                    color: Colors.blueAccent,
+                  ),
+                  child: Center(
+                    child: CircleAvatar(
+                      backgroundColor: Colors.cyanAccent ,
+                      radius: 60,
+                      child: FlutterLogo(size: 60,),
+                    ),
+                  ),
                 ),
 
-                RaisedButton(
-                  child: Text("Animation", style: TextStyle(color: Colors.white),),
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => AnimationPage()));
-                  },
+                Expanded(
+                  child: ListView(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    children: <Widget>[
+                      InkWell(
+                        highlightColor: Colors.grey[200],
+                        onTap: (){
+                          _register();
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Text("Register My Device"),
+                        ),
+                      ),
+
+                      InkWell(
+                        highlightColor: Colors.grey[200],
+                        onTap: (){
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => AnimationPage()));
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Text("Silve Appbar"),
+                        ),
+                      ),
+
+                      InkWell(
+                        highlightColor: Colors.grey[200],
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => LanguagePage()));
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Text("Change Language").tr(context: context),
+                        ),
+                      ),
+                    ],
+                  ),
                 )
                 // Text("Message: $message")
               ]),

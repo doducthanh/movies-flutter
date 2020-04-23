@@ -202,7 +202,8 @@ class _ListChatState extends State<ListChat> {
           scrollDirection: Axis.vertical,
           itemCount: widget.messages.length,
           itemBuilder: (BuildContext context, index) {
-            return GestureDetector(
+            return InkWell(
+              highlightColor: Colors.black,
               onTap: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => ChatPage()));
