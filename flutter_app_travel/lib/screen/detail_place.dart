@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterapptravel/consts/model.dart';
 import 'package:flutterapptravel/model/place.dart';
+import 'package:flutterapptravel/screen/map_screen.dart';
 
 class DetailPlacePage extends StatefulWidget {
   Place place;
@@ -132,10 +133,11 @@ class _DetailPlacePageState extends State<DetailPlacePage> {
                             )
                           ],
                         ),
-                        Icon(
-                          Icons.location_on,
-                          color: Colors.white,
-                          size: 30,
+                        IconButton(
+                          onPressed: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => MapPage()));
+                          },
+                          icon: Icon(Icons.location_on, color: Colors.white, size: 30,),
                         )
                       ],
                     )
