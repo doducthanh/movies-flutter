@@ -233,7 +233,19 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.only(top: 16),
             child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: Image.asset(hotel1.urlImage)))
+                child: Image.asset(hotel1.urlImage))),
+
+        Container(
+            padding: EdgeInsets.only(top: 16),
+            child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(hotel2.urlImage))),
+
+        Container(
+            padding: EdgeInsets.only(top: 16),
+            child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(hotel3.urlImage)))
       ],
     );
   }
