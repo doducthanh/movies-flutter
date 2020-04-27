@@ -62,7 +62,7 @@ class MainPageState extends State<MainPage> {
     showDialog(
         context: context,
         builder: (context) {
-          return CupertinoAlertDialog(
+          return AlertDialog(
             title: Text("Bạn có muốn đăng xuất tài khoản không?"),
             actions: <Widget>[
               FlatButton(
@@ -74,13 +74,13 @@ class MainPageState extends State<MainPage> {
                   AppCaches.logout();
                   widget._accountBloc.getAccountCache();
                 },
-                child: Text("Có"),
+                child: Text("Có", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
               ),
               FlatButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text("Không"),
+                child: Text("Không", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
               )
             ],
           );
