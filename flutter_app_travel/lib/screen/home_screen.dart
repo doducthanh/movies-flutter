@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterapptravel/bloc/theme_bloc.dart';
 import 'package:flutterapptravel/consts/model.dart';
 import 'package:flutterapptravel/screen/detail_place.dart';
 import 'package:flutterapptravel/widget/favourite_vehical.dart';
@@ -13,15 +14,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(child: SingleChildScrollView(child: _buildBody())),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.search), title: Text("")),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.access_alarm), title: Text("")),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle), title: Text(""))
-        ],
-      ),
     );
   }
 
@@ -38,7 +30,6 @@ class _HomePageState extends State<HomePage> {
               child: Text(
                 "What you would like to find?",
                 style: TextStyle(
-                    color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 30),
                 textAlign: TextAlign.left,
@@ -69,14 +60,13 @@ class _HomePageState extends State<HomePage> {
             Text(
               "Top Destinations",
               style: TextStyle(
-                  color: Colors.black,
                   fontWeight: FontWeight.bold,
                   fontSize: 24),
             ),
             Text(
               "See All",
               style: TextStyle(
-                  color: Colors.greenAccent,
+                  color: ThemeBloc.green,
                   fontWeight: FontWeight.bold,
                   fontSize: 18),
             )
@@ -155,7 +145,7 @@ class _HomePageState extends State<HomePage> {
                                 height: 180,
                                 decoration: BoxDecoration(
                                     gradient: LinearGradient(
-                                        colors: [Colors.black, Colors.white],
+                                        colors: [Colors.black, Colors.transparent],
                                         begin: FractionalOffset(0, 1),
                                         end: FractionalOffset(0, 0))),
                               ),
@@ -216,14 +206,13 @@ class _HomePageState extends State<HomePage> {
             Text(
               "Exclusive Hotels",
               style: TextStyle(
-                  color: Colors.black,
                   fontWeight: FontWeight.bold,
                   fontSize: 24),
             ),
             Text(
               "See All",
               style: TextStyle(
-                  color: Colors.greenAccent,
+                  color: ThemeBloc.green,
                   fontWeight: FontWeight.bold,
                   fontSize: 18),
             )

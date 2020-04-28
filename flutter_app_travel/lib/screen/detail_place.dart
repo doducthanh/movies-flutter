@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutterapptravel/bloc/theme_bloc.dart';
 import 'package:flutterapptravel/consts/model.dart';
 import 'package:flutterapptravel/model/place.dart';
 import 'package:flutterapptravel/screen/map_screen.dart';
@@ -22,15 +23,21 @@ class _DetailPlacePageState extends State<DetailPlacePage> {
   }
 
   Widget _buildBody() {
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      color: Colors.grey[300],
-      child: Column(
-        children: <Widget>[_buildHeader(),
-          SizedBox(height: 10,),
-          Expanded(child: _buildListPlace())],
-      ),
+    return StreamBuilder<ThemeData>(
+      stream: ThemeBloc.getStream,
+      builder: (context, snapshot) {
+
+        return Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          color: ThemeBloc.grey,
+          child: Column(
+            children: <Widget>[_buildHeader(),
+              SizedBox(height: 10,),
+              Expanded(child: _buildListPlace())],
+          ),
+        );
+      }
     );
   }
 
@@ -58,7 +65,7 @@ class _DetailPlacePageState extends State<DetailPlacePage> {
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Colors.black, Colors.white],
+                  colors: [Colors.black, Colors.transparent],
                   begin: FractionalOffset(0, 0.5),
                   end: FractionalOffset(0, 0)
                 )

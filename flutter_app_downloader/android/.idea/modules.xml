@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/android.iml" filepath="$PROJECT_DIR$/android.iml" group="android" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="android/app" />
+      <module fileurl="file://D:/Flutter install/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_downloader-1.4.4/android/flutter_downloader.iml" filepath="D:/Flutter install/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_downloader-1.4.4/android/flutter_downloader.iml" group="android/flutter_downloader" />
+      <module fileurl="file://D:/Flutter install/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-1.6.7/android/path_provider.iml" filepath="D:/Flutter install/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-1.6.7/android/path_provider.iml" group="android/path_provider" />
+      <module fileurl="file://D:/Flutter install/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_macos-0.0.4+1/android/path_provider_macos.iml" filepath="D:/Flutter install/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider_macos-0.0.4+1/android/path_provider_macos.iml" group="android/path_provider_macos" />
+      <module fileurl="file://D:/Flutter install/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-4.4.0+hotfix.4/android/permission_handler.iml" filepath="D:/Flutter install/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-4.4.0+hotfix.4/android/permission_handler.iml" group="android/permission_handler" />
+    </modules>
+  </component>
+</project>
